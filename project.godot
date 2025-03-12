@@ -11,5 +11,6 @@ config_version=5
 [application]
 
 config/name="Dress to Aggress"
+run/main_scene="res://DressupScene.tscn"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://Assets/icon.svg"
