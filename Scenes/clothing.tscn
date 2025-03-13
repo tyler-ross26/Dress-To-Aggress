@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://csd8c1vg7aty7"]
+
+[ext_resource type="Script" uid="uid://cjo2x4bnwrpfu" path="res://clothing.gd" id="1_wmbt7"]
+[ext_resource type="Texture2D" uid="uid://g3dtj2iihaw3" path="res://Assets/icon.svg" id="2_vyx5s"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_h30mf"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_vyx5s")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[node name="BaseClothing" type="Node2D"]
+script = ExtResource("1_wmbt7")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_h30mf")

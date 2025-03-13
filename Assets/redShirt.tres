@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Wearable" load_steps=2 format=3 uid="uid://c7mkbose27gt7"]
+
+[ext_resource type="Script" uid="uid://0bwef23hrt6j" path="res://Scenes/Wearable.gd" id="1_umvq1"]
+
+[resource]
+script = ExtResource("1_umvq1")
+ClothingType = "SHIRT"
+Rarity = "COMMON"
+attackDamageChange = 5
+stylePoints = 5
+styleMultiplier = 1.0
+speedChange = 0
+outfitSet = "Basic"
+outfitPattern = "Solid"
+metadata/_custom_type_script = "uid://0bwef23hrt6j"
