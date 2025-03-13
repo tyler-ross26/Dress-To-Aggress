@@ -10,10 +10,10 @@ func _process(delta):
 	if draggable:
 		if Input.is_action_just_pressed("click"):
 			initialPos = self.global_position
-			offset = get_viewport().get_global_mouse_posistion() - self.global_position
+			offset = get_viewport().get_mouse_posistion() - self.global_position
 			global.is_dragging = true;
 		if Input.is_action_pressed("click"):
-			self.global_position = get_viewport().get_global_mouse_posistion()
+			self.global_position = get_viewport().get_mouse_posistion()
 		elif Input.is_action_just_released("click"):
 			global.is_dragging = false 
 			var tween = get_tree().create_tween()

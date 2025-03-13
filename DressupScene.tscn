@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bd3651qamkwtf"]
+[gd_scene load_steps=8 format=3 uid="uid://bd3651qamkwtf"]
 
 [ext_resource type="Texture2D" uid="uid://xslp5k44t814" path="res://Assets/dress-up-room.jpg" id="1_sxckm"]
 [ext_resource type="Script" uid="uid://47doy8jtpiyc" path="res://object.gd" id="2_6j362"]
@@ -7,6 +7,8 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6j362"]
 size = Vector2(127, 127)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c8ojq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ayre0"]
 size = Vector2(130, 128)
@@ -34,6 +36,9 @@ texture = ExtResource("2_rjjwr")
 position = Vector2(496.5, 338.5)
 shape = SubResource("RectangleShape2D_6j362")
 
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+shape = SubResource("RectangleShape2D_c8ojq")
+
 [node name="StaticBody2D" type="StaticBody2D" parent="." groups=["dropable"]]
 script = ExtResource("4_6j362")
 
@@ -44,6 +49,11 @@ shape = SubResource("RectangleShape2D_ayre0")
 [node name="ColorRect" type="ColorRect" parent="StaticBody2D"]
 offset_right = 128.0
 offset_bottom = 128.0
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(585, 311)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [connection signal="input_event" from="CharacterBody2D" to="CharacterBody2D" method="_on_input_event"]
 [connection signal="body_entered" from="CharacterBody2D/Area2D" to="CharacterBody2D" method="_on_area_2d_body_entered"]
