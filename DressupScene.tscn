@@ -1,11 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://bd3651qamkwtf"]
+[gd_scene load_steps=7 format=3 uid="uid://bd3651qamkwtf"]
 
 [ext_resource type="Texture2D" uid="uid://xslp5k44t814" path="res://Assets/dress-up-room.jpg" id="1_sxckm"]
-[ext_resource type="Script" uid="uid://ki33083jhp5l" path="res://DragAndDrop.gd" id="2_6j362"]
+[ext_resource type="Script" uid="uid://47doy8jtpiyc" path="res://object.gd" id="2_6j362"]
 [ext_resource type="Texture2D" uid="uid://g3dtj2iihaw3" path="res://Assets/icon.svg" id="2_rjjwr"]
+[ext_resource type="Script" uid="uid://dd2lyyxc6ac65" path="res://platform.gd" id="4_6j362"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6j362"]
 size = Vector2(127, 127)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ayre0"]
+size = Vector2(130, 128)
 
 [node name="Node2D" type="Node2D"]
 
@@ -20,12 +24,29 @@ texture = ExtResource("1_sxckm")
 input_pickable = true
 script = ExtResource("2_6j362")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D"]
+position = Vector2(497, 338)
+texture = ExtResource("2_rjjwr")
+
+[node name="Area2D" type="Area2D" parent="CharacterBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D/Area2D"]
 position = Vector2(496.5, 338.5)
 shape = SubResource("RectangleShape2D_6j362")
 
-[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D"]
-position = Vector2(496, 339)
-texture = ExtResource("2_rjjwr")
+[node name="StaticBody2D" type="StaticBody2D" parent="." groups=["dropable"]]
+script = ExtResource("4_6j362")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(65, 64)
+shape = SubResource("RectangleShape2D_ayre0")
+
+[node name="ColorRect" type="ColorRect" parent="StaticBody2D"]
+offset_right = 128.0
+offset_bottom = 128.0
 
 [connection signal="input_event" from="CharacterBody2D" to="CharacterBody2D" method="_on_input_event"]
+[connection signal="body_entered" from="CharacterBody2D/Area2D" to="CharacterBody2D" method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="CharacterBody2D/Area2D" to="CharacterBody2D" method="_on_area_2d_body_exited"]
+[connection signal="mouse_entered" from="CharacterBody2D/Area2D" to="CharacterBody2D" method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="CharacterBody2D/Area2D" to="CharacterBody2D" method="_on_area_2d_mouse_exited"]
