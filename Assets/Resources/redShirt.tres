@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="Wearable" load_steps=2 format=3 uid="uid://c7mkbose27gt7"]
 
-[ext_resource type="Script" uid="uid://0bwef23hrt6j" path="res://Scenes/Wearable.gd" id="1_umvq1"]
+[ext_resource type="Script" uid="uid://0bwef23hrt6j" path="res://Scripts/Wearable.gd" id="1_nim6y"]
 
 [resource]
-script = ExtResource("1_umvq1")
+script = ExtResource("1_nim6y")
 ClothingType = "SHIRT"
 Rarity = "COMMON"
 attackDamageChange = 5

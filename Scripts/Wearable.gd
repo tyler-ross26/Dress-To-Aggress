@@ -18,14 +18,11 @@ class_name Wearable
 
 @export_category("Animation Frames")
 @export var idlePose: Texture2D
-@export var mirrorPose: Texture2D
 @export var walkPose1: Texture2D
-@export var walkPose2: Texture2D
 @export var blockPose: Texture2D
 @export var kickPose: Texture2D
 @export var punchPose: Texture2D
 @export var hurtPose: Texture2D
-@export var knockdownPose: Texture2D
 @export var Pose28: Texture2D
 
 func get_clothing_type() -> String:
@@ -55,15 +52,9 @@ func get_outfit_pattern() -> String:
 func get_idle_pose() -> Texture2D:
 	return idlePose
 
-func get_mirror_pose() -> Texture2D:
-	return mirrorPose
-
 func get_walk_pose1() -> Texture2D:
 	return walkPose1
-
-func get_walk_pose2() -> Texture2D:
-	return walkPose2
-
+	
 func get_block_pose() -> Texture2D:
 	return blockPose
 
@@ -75,9 +66,6 @@ func get_punch_pose() -> Texture2D:
 
 func get_hurt_pose() -> Texture2D:
 	return hurtPose
-
-func get_knockdown_pose() -> Texture2D:
-	return knockdownPose
 
 func get_pose28() -> Texture2D:
 	return Pose28
