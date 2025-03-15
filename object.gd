@@ -5,23 +5,39 @@ var is_inside_dropable = false
 var body_ref
 var offset: Vector2
 var initialPos: Vector2
+var started = false 
 
+
+	
 func _process(delta):
-	if draggable:
+	if not started:
+		get_parent().position =  Vector2(220.0,-160.0)
+	
+	if Input.is_action_just_pressed("click"):
+		started = true
+	
+	if draggable and started:
 		if Input.is_action_just_pressed("click"):
 			initialPos = self.global_position
 			offset = get_viewport().get_mouse_position() - self.global_position
 			global.is_dragging = true;
 		if Input.is_action_pressed("click"):
+			get_parent().position =  Vector2(0.0,0.0)
 			self.global_position = get_viewport().get_mouse_position()  - offset
 		elif Input.is_action_just_released("click"):
 			global.is_dragging = false 
 			var tween = get_tree().create_tween()
 			if is_inside_dropable:
+				print("is_inside_dropable")
+				print(body_ref.position)
+				#get_parent().gravity_scale = 0.0
+				#get_parent().position =  Vector2(0.0,0.0)
 				tween.tween_property(self, "position", body_ref.position, 0.2).set_ease(Tween.EASE_OUT)
+				get_parent().gravity_scale = 0.0
 			else:
-				tween.tween_property(self, "global_position", initialPos, 0.2).set_ease(Tween.EASE_OUT)
-			
+				get_parent().gravity_scale = 1.0
+				#tween.tween_property(self, "global_position", initialPos, 0.2).set_ease(Tween.EASE_OUT)
+			print(body_ref.position)
 			
 			
 	
@@ -45,9 +61,11 @@ func _on_area_2d_body_entered(body: StaticBody2D):
 		body_ref = body
 		
 		
+		
 
 
 func _on_area_2d_body_exited(body):
 	if body.is_in_group('dropable') && body_ref == body:
 		is_inside_dropable = false
 		body.modulate  = Color(Color.MEDIUM_PURPLE, 0.7)
+		

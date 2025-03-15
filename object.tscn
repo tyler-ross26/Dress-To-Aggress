@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cvacyegnnbes0"]
 
 [ext_resource type="Script" uid="uid://47doy8jtpiyc" path="res://object.gd" id="1_3xuqs"]
-[ext_resource type="Texture2D" uid="uid://g3dtj2iihaw3" path="res://Assets/icon.svg" id="2_0i3lm"]
+[ext_resource type="Texture2D" uid="uid://8n1jhvvls0pw" path="res://Assets/dress.png" id="2_3xuqs"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dwaef"]
 size = Vector2(129, 130)
@@ -10,7 +10,8 @@ size = Vector2(129, 130)
 script = ExtResource("1_3xuqs")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_0i3lm")
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("2_3xuqs")
 
 [node name="Area2D" type="Area2D" parent="."]
 

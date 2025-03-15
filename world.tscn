@@ -1,8 +1,14 @@
-[gd_scene load_steps=4 format=3 uid="uid://b1fc1024thyov"]
+[gd_scene load_steps=6 format=3 uid="uid://b1fc1024thyov"]
 
 [ext_resource type="Texture2D" uid="uid://xslp5k44t814" path="res://Assets/dress-up-room.jpg" id="1_fj7yv"]
 [ext_resource type="PackedScene" uid="uid://cvacyegnnbes0" path="res://object.tscn" id="2_tlwt5"]
 [ext_resource type="PackedScene" uid="uid://cnlqn7i6s4r" path="res://platform.tscn" id="3_tlwt5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tlwt5"]
+size = Vector2(130, 129)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aqk2v"]
+size = Vector2(1151, 52)
 
 [node name="World" type="Node2D"]
 
@@ -13,7 +19,29 @@ position = Vector2(-1, 2.99999)
 scale = Vector2(0.765563, 0.665306)
 texture = ExtResource("1_fj7yv")
 
-[node name="Object" parent="." instance=ExtResource("2_tlwt5")]
-
 [node name="Platform" parent="." instance=ExtResource("3_tlwt5")]
 position = Vector2(-227, -21)
+
+[node name="Platform2" parent="." instance=ExtResource("3_tlwt5")]
+position = Vector2(221, -162)
+
+[node name="Platform3" parent="." instance=ExtResource("3_tlwt5")]
+position = Vector2(82, -162)
+
+[node name="Platform4" parent="." instance=ExtResource("3_tlwt5")]
+position = Vector2(360, -162)
+
+[node name="RigidBody2D" type="RigidBody2D" parent="."]
+position = Vector2(220, -160)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_tlwt5")
+
+[node name="Object" parent="RigidBody2D" instance=ExtResource("2_tlwt5")]
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(-0.5, 300)
+shape = SubResource("RectangleShape2D_aqk2v")
