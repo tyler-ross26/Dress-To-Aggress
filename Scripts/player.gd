@@ -164,5 +164,5 @@ func start_action(frames, continuation, animation):
 	
 	var wait_time = frames * FRAME
 	var timer = get_tree().create_timer(wait_time)
-	print("Creating a timer for " + str(wait_time))
+	#print("Creating a timer for " + str(wait_time))
 	timer.timeout.connect(continuation)
