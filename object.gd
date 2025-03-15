@@ -10,10 +10,10 @@ func _process(delta):
 	if draggable:
 		if Input.is_action_just_pressed("click"):
 			initialPos = self.global_position
-			offset = get_viewport().get_mouse_posistion() - self.global_position
+			offset = get_viewport().get_mouse_position() - self.global_position
 			global.is_dragging = true;
 		if Input.is_action_pressed("click"):
-			self.global_position = get_viewport().get_mouse_posistion()
+			self.global_position = get_viewport().get_mouse_position()  - offset
 		elif Input.is_action_just_released("click"):
 			global.is_dragging = false 
 			var tween = get_tree().create_tween()
@@ -38,7 +38,7 @@ func _on_area_2d_mouse_exited():
 		self.scale = Vector2(1, 1)
 
 
-func _on_area_2d_body_entered(body: CharacterBody2D):
+func _on_area_2d_body_entered(body: StaticBody2D):
 	if body.is_in_group('dropable'):
 		is_inside_dropable = true
 		body.modulate = Color(Color.REBECCA_PURPLE, 1)
@@ -47,7 +47,7 @@ func _on_area_2d_body_entered(body: CharacterBody2D):
 		
 
 
-func _on_area_2d_body_exited(body: CharacterBody2D):
+func _on_area_2d_body_exited(body):
 	if body.is_in_group('dropable') && body_ref == body:
 		is_inside_dropable = false
 		body.modulate  = Color(Color.MEDIUM_PURPLE, 0.7)
