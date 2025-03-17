@@ -8,37 +8,39 @@ var initialPos: Vector2
 var started = false 
 
 
-	
-func _process(delta):
-	if not started:
-		get_parent().position =  Vector2(220.0,-160.0)
-	
-	if Input.is_action_just_pressed("click"):
-		started = true
-	
-	if draggable and started:
-		if Input.is_action_just_pressed("click"):
-			initialPos = self.global_position
-			offset = get_viewport().get_mouse_position() - self.global_position
-			global.is_dragging = true;
-		if Input.is_action_pressed("click"):
-			get_parent().position =  Vector2(0.0,0.0)
-			self.global_position = get_viewport().get_mouse_position()  - offset
-		elif Input.is_action_just_released("click"):
-			global.is_dragging = false 
-			var tween = get_tree().create_tween()
-			if is_inside_dropable:
-				print("is_inside_dropable")
-				print(body_ref.position)
+	#
+#func _process(delta):
+	#if not started:
+		#get_parent().position =  Vector2(220.0,-160.0)
+	#
+	#if Input.is_action_just_pressed("click"):
+		#started = true
+	#
+	#if draggable and started:
+		#if Input.is_action_just_pressed("click"):
+			#initialPos = self.global_position
+			#offset = get_viewport().get_mouse_position() - self.global_position
+			#global.is_dragging = true;
+		#if Input.is_action_pressed("click"):
+			#get_parent().position =  Vector2(0.0,0.0)
+			#self.global_position = get_viewport().get_mouse_position()  - offset
+		#elif Input.is_action_just_released("click"):
+			#global.is_dragging = false 
+			#var tween = get_tree().create_tween()
+			#if is_inside_dropable:
 				#get_parent().gravity_scale = 0.0
-				#get_parent().position =  Vector2(0.0,0.0)
-				tween.tween_property(self, "position", body_ref.position, 0.2).set_ease(Tween.EASE_OUT)
-				get_parent().gravity_scale = 0.0
-			else:
-				get_parent().gravity_scale = 1.0
-				#tween.tween_property(self, "global_position", initialPos, 0.2).set_ease(Tween.EASE_OUT)
-			print(body_ref.position)
-			
+				#print("is_inside_dropable")
+				#print(body_ref.position)
+				#print(get_parent().gravity_scale)
+				##get_parent().gravity_scale = 0.0
+				##get_parent().position =  Vector2(0.0,0.0)
+				#tween.tween_property(self, "position", body_ref.position, 0.2).set_ease(Tween.EASE_OUT)
+				#
+			#else:
+				#get_parent().gravity_scale = 1.0
+				##tween.tween_property(self, "global_position", initialPos, 0.2).set_ease(Tween.EASE_OUT)
+			#print(body_ref.position)
+			#
 			
 	
 	
@@ -57,6 +59,7 @@ func _on_area_2d_mouse_exited():
 func _on_area_2d_body_entered(body: StaticBody2D):
 	if body.is_in_group('dropable'):
 		is_inside_dropable = true
+		print("here")
 		body.modulate = Color(Color.REBECCA_PURPLE, 1)
 		body_ref = body
 		

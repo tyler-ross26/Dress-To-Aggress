@@ -9,3 +9,4 @@ func _process(delta):
 	else:
 		visible = false
 	
+	
