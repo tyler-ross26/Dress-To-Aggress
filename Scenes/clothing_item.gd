@@ -38,3 +38,12 @@ func _ready() -> void:
 	hurtPose = wearable_resource.get_hurt_pose();
 	Pose28 = wearable_resource.get_pose28();
 	
+	$Sprite2D.set_texture(idlePose)
+	$Sprite2D.scale.x = 0.1
+	$Sprite2D.scale.y = 0.1
+	
+func get_wearable_resource() -> Wearable:
+	return wearable_resource
+
+func set_idle() -> void:
+	$Sprite2D.set_texture(idlePose)

@@ -9,9 +9,12 @@ var started = false
 var platforms = 0
 var stat_box : TextEdit
 
+@export var current_wearable: Wearable
+
 func _ready():
 	stat_box = get_child(2)
 	stat_box.visible = false
+	current_wearable = $WearableObject.get_wearable_resource() #Will Throw Error If No Resource Present
 
 	#
 #func _process(delta):

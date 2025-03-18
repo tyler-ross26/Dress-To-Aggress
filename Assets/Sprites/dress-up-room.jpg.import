@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://8n1jhvvls0pw"
-path="res://.godot/imported/dress.png-ec237871844401c490a584eee863a40e.ctex"
+uid="uid://xslp5k44t814"
+path="res://.godot/imported/dress-up-room.jpg-10a377151de7d8d2e525d22042bee9ba.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/dress.png"
-dest_files=["res://.godot/imported/dress.png-ec237871844401c490a584eee863a40e.ctex"]
+source_file="res://Assets/Sprites/dress-up-room.jpg"
+dest_files=["res://.godot/imported/dress-up-room.jpg-10a377151de7d8d2e525d22042bee9ba.ctex"]
 
 [params]
 

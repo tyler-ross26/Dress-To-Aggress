@@ -1,8 +1,8 @@
 [gd_scene load_steps=6 format=3 uid="uid://bbeehwoidra21"]
 
-[ext_resource type="Texture2D" uid="uid://xslp5k44t814" path="res://Assets/dress-up-room.jpg" id="1_sxckm"]
-[ext_resource type="Script" uid="uid://47doy8jtpiyc" path="res://object.gd" id="2_6j362"]
-[ext_resource type="Texture2D" uid="uid://g3dtj2iihaw3" path="res://Assets/icon.svg" id="2_rjjwr"]
+[ext_resource type="Texture2D" uid="uid://xslp5k44t814" path="res://Assets/Sprites/dress-up-room.jpg" id="1_sxckm"]
+[ext_resource type="Script" uid="uid://47doy8jtpiyc" path="res://Scenes/object.gd" id="2_6j362"]
+[ext_resource type="Texture2D" uid="uid://g3dtj2iihaw3" path="res://Assets/Sprites/icon.svg" id="2_rjjwr"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c8ojq"]
 
