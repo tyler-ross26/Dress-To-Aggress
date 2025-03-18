@@ -1,13 +1,45 @@
 extends Node2D
 
-var last_clicked : String
+var last_clicked
+
+
+var draggable = false
+var is_inside_dropable = false
+var body_ref
+var offset: Vector2
+var initialPos: Vector2
+var collider : CollisionShape2D
 
 func _process(delta):
-		if Input.is_action_just_pressed("click") and (last_clicked == "Area2D" or  last_clicked == "RigidBody2D"):
+	if ( last_clicked is RigidBody2D):
+		if Input.is_action_just_pressed("click"):
+			
+			initialPos = last_clicked.global_position
+			offset = get_viewport().get_mouse_position() - last_clicked.global_position
+			global.is_dragging = true
+			
 			print("click")
-		
-		
-		
+			
+		if Input.is_action_pressed("click"):
+			last_clicked.global_position = get_viewport().get_mouse_position()  - offset
+			#print("follow mouse")
+			
+		elif Input.is_action_just_released("click"):
+			print("release")
+			global.is_dragging = false 
+			var tween = get_tree().create_tween()
+			if last_clicked.get_child(1).is_inside_dropable:
+				print("in platform")
+				last_clicked.gravity_scale = 0.0
+				tween.tween_property(last_clicked, "position", last_clicked.get_child(1).body_ref.position, 0.2).set_ease(Tween.EASE_OUT)
+				
+				#last_clicked.position = last_clicked.get_child(1).body_ref.position
+			else:
+				print("leave")
+				last_clicked.gravity_scale = 1.0
+
+	
+
 func _input(event):
 	# Check for left mouse button press
 	
@@ -26,8 +58,8 @@ func _input(event):
 			# If any collider was found at this point, print the first one's name
 		if results.size() > 0:
 			var clicked_object = results[0].collider
-			last_clicked = clicked_object.name
-			print(last_clicked)
+			last_clicked = clicked_object
+			print(last_clicked.name)
 			
 			
 			

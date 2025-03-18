@@ -36,7 +36,8 @@ position = Vector2(82, -162)
 position = Vector2(360, -162)
 
 [node name="RigidBody2D" type="RigidBody2D" parent="."]
-position = Vector2(220, -160)
+collision_layer = 4
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
 position = Vector2(0, 0.5)
@@ -45,6 +46,8 @@ shape = SubResource("RectangleShape2D_tlwt5")
 [node name="Object" parent="RigidBody2D" instance=ExtResource("2_tlwt5")]
 
 [node name="StaticBody2D" type="StaticBody2D" parent="."]
+collision_layer = 4
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
 position = Vector2(-0.5, 300)

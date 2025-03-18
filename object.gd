@@ -2,10 +2,11 @@ extends Node
 
 var draggable = false
 var is_inside_dropable = false
-var body_ref
+var body_ref : StaticBody2D
 var offset: Vector2
 var initialPos: Vector2
 var started = false 
+var platforms = 0
 
 
 	#
@@ -57,18 +58,17 @@ func _on_area_2d_mouse_exited():
 
 
 func _on_area_2d_body_entered(body: StaticBody2D):
-	if body.is_in_group('dropable'):
+	
+	if (body.is_in_group('dropable') and platforms < 1):
+		platforms += 1
 		is_inside_dropable = true
-		print("here")
 		body.modulate = Color(Color.REBECCA_PURPLE, 1)
 		body_ref = body
 		
-		
-		
-
 
 func _on_area_2d_body_exited(body):
-	if body.is_in_group('dropable') && body_ref == body:
+	if body.is_in_group('dropable') and platforms == 1:
+		platforms -= 1
 		is_inside_dropable = false
 		body.modulate  = Color(Color.MEDIUM_PURPLE, 0.7)
 		
