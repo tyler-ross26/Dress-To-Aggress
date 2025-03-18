@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://b1fc1024thyov"]
+
+[ext_resource type="Script" uid="uid://b7amrd0viad8a" path="res://drag_interaction_provider.gd" id="1_aqk2v"]
+[ext_resource type="Texture2D" uid="uid://xslp5k44t814" path="res://Assets/dress-up-room.jpg" id="1_fj7yv"]
+[ext_resource type="PackedScene" uid="uid://cvacyegnnbes0" path="res://object.tscn" id="2_tlwt5"]
+[ext_resource type="PackedScene" uid="uid://cnlqn7i6s4r" path="res://platform.tscn" id="3_tlwt5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aqk2v"]
+size = Vector2(1151, 52)
+
+[node name="World" type="Node2D"]
+
+[node name="Drag-Interaction-Provider" type="Node2D" parent="."]
+script = ExtResource("1_aqk2v")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-1, 2.99999)
+scale = Vector2(0.765563, 0.665306)
+texture = ExtResource("1_fj7yv")
+
+[node name="Platform" parent="." instance=ExtResource("3_tlwt5")]
+position = Vector2(-227, -21)
+
+[node name="Platform2" parent="." instance=ExtResource("3_tlwt5")]
+position = Vector2(221, -162)
+
+[node name="Platform3" parent="." instance=ExtResource("3_tlwt5")]
+position = Vector2(82, -162)
+
+[node name="Platform4" parent="." instance=ExtResource("3_tlwt5")]
+position = Vector2(360, -162)
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(-0.5, 300)
+shape = SubResource("RectangleShape2D_aqk2v")
+
+[node name="Object" parent="." instance=ExtResource("2_tlwt5")]

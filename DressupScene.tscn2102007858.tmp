@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://bd3651qamkwtf"]
+
+[ext_resource type="Texture2D" uid="uid://xslp5k44t814" path="res://Assets/dress-up-room.jpg" id="1_sxckm"]
+[ext_resource type="Script" uid="uid://ki33083jhp5l" path="res://DragAndDrop.gd" id="2_6j362"]
+[ext_resource type="Texture2D" uid="uid://g3dtj2iihaw3" path="res://Assets/icon.svg" id="2_rjjwr"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6j362"]
+size = Vector2(127, 127)
+
+[node name="Node2D" type="Node2D"]
+
+[node name="CanvasGroup" type="CanvasGroup" parent="."]
+
+[node name="Dress-up-room" type="Sprite2D" parent="CanvasGroup"]
+position = Vector2(577, 324)
+scale = Vector2(0.763576, 0.660204)
+texture = ExtResource("1_sxckm")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+input_pickable = true
+script = ExtResource("2_6j362")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+position = Vector2(496.5, 338.5)
+shape = SubResource("RectangleShape2D_6j362")
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D"]
+position = Vector2(496, 339)
+texture = ExtResource("2_rjjwr")
+
+[connection signal="input_event" from="CharacterBody2D" to="CharacterBody2D" method="_on_input_event"]
