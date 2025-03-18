@@ -583,6 +583,7 @@ zoom = Vector2(8.204, 8.62)
 
 [node name="Player" parent="." instance=ExtResource("2_f7g2b")]
 position = Vector2(1, -18)
+MIDAIR_DASH = false
 
 [node name="Invisible Wall2" type="StaticBody2D" parent="."]
 position = Vector2(-482, 2)
