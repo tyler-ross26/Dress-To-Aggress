@@ -14,9 +14,18 @@ scale = Vector2(0.1, 0.1)
 texture = ExtResource("2_3xuqs")
 
 [node name="Area2D" type="Area2D" parent="."]
+gravity_space_override = 1
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_dwaef")
+
+[node name="TextEdit" type="TextEdit" parent="."]
+offset_left = -113.0
+offset_top = -76.0
+offset_right = -38.0
+offset_bottom = -7.0
+text = "Stats:
+ +5 dmg"
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]

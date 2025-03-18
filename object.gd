@@ -7,7 +7,11 @@ var offset: Vector2
 var initialPos: Vector2
 var started = false 
 var platforms = 0
+var stat_box : TextEdit
 
+func _ready():
+	stat_box = get_child(2)
+	stat_box.visible = false
 
 	#
 #func _process(delta):
@@ -49,12 +53,15 @@ func _on_area_2d_mouse_entered():
 	if not global.is_dragging:
 		draggable = true
 		self.scale = Vector2(1.05, 1.05)
+		stat_box.visible = true
 
 
 func _on_area_2d_mouse_exited():
+	stat_box = get_child(2)
 	if not global.is_dragging:
 		draggable = false
 		self.scale = Vector2(1, 1)
+		stat_box.visible = false
 
 
 func _on_area_2d_body_entered(body: StaticBody2D):

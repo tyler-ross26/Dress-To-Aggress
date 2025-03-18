@@ -10,8 +10,9 @@ var offset: Vector2
 var initialPos: Vector2
 var collider : CollisionShape2D
 
+
 func _process(delta):
-	if ( last_clicked is RigidBody2D):
+	if ( last_clicked is Area2D):
 		if Input.is_action_just_pressed("click"):
 			
 			initialPos = last_clicked.global_position
@@ -21,22 +22,27 @@ func _process(delta):
 			print("click")
 			
 		if Input.is_action_pressed("click"):
-			last_clicked.global_position = get_viewport().get_mouse_position()  - offset
+			last_clicked.get_parent().global_position = get_viewport().get_mouse_position()  - offset
 			#print("follow mouse")
 			
 		elif Input.is_action_just_released("click"):
 			print("release")
 			global.is_dragging = false 
 			var tween = get_tree().create_tween()
-			if last_clicked.get_child(1).is_inside_dropable:
-				print("in platform")
-				last_clicked.gravity_scale = 0.0
-				tween.tween_property(last_clicked, "position", last_clicked.get_child(1).body_ref.position, 0.2).set_ease(Tween.EASE_OUT)
+			is_inside_dropable = last_clicked.get_parent().is_inside_dropable
+			
+			if is_inside_dropable:
 				
-				#last_clicked.position = last_clicked.get_child(1).body_ref.position
+				print("in platform")
+				#last_clicked.gravity_scale = 0.0
+				tween.tween_property( last_clicked.get_parent(), "position",  last_clicked.get_parent().body_ref.position, 0.2).set_ease(Tween.EASE_OUT)
+				
+				#last_clicked.position = last_clicked.get_parent().body_ref.position
 			else:
 				print("leave")
-				last_clicked.gravity_scale = 1.0
+				#tween.tween_property( last_clicked.get_parent(), "position",initialPos, 0.2).set_ease(Tween.EASE_OUT)
+				
+				#last_clicked.gravity_scale = 1.0
 
 	
 
@@ -59,7 +65,11 @@ func _input(event):
 		if results.size() > 0:
 			var clicked_object = results[0].collider
 			last_clicked = clicked_object
-			print(last_clicked.name)
+			print("0",last_clicked.name)
+		if results.size() > 1:
+			var clicked_object = results[1].collider
+			last_clicked = clicked_object
+			print("1",results[1].collider.name)
 			
 			
 			
