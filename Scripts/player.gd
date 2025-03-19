@@ -1,12 +1,15 @@
 extends CharacterBody2D
 
 #At the heart of the player controller, this is the ENUM that defines all the current states the player can be in. This will get longer as more states are added, and this should be the first place you go to add a new state.
-enum CharacterState { IDLE, WALK, JUMP, DASH, STARTUP }
+enum CharacterState { IDLE, WALK, JUMP, DASH, STARTUP, RECOVERY, PUNCH, HURT }
 var state = CharacterState.IDLE
 var left_ground_check = false
 
 @onready
 var animation_player: AnimatedSprite2D = $AnimatedSprite2D
+
+@onready
+var punch_hitbox: Hitbox = $"Punch Hitbox"
 
 var direction := 0
 var dash_direction = 0
@@ -28,6 +31,24 @@ var dash_timer = 0.0
 @export var DASH_SPEED = 90 # Set dash speed
 @export var DASH_COOLDOWN = 0.2 # Half a second cooldown between valid dashes. This prevents the player from spamming dash across the screen, without stopping.
 @export var MIDAIR_DASH = true
+
+#Note for the below data: onBlock is positive because, if an attack is blocked, the player will transition to the RECOVERY state for (recovery + onBlock) frames. 
+var attack_timer = 0.0
+var punch_data = {
+	"startup_frames" : 4,
+	"active_frames" : 2,
+	"recovery_frames" : 7,
+	"onBlock_FA" : -3,
+	"blockstun_frames" : 11,
+	"groundHitstun": 16,
+	"airHitstun" : 16,
+	"knockback_force" : 200,
+	"startup_animation" : "jump startup",
+	"active_animation" : "punch",
+	"recovery_animation" : "punch recovery",
+	"forward_force": 50
+}
+var punch_deceleration = 10
 
 #Defines the player's walk speed, and jump speeds.
 @export var SPEED = 20.0
@@ -55,7 +76,7 @@ func handle_input(delta):
 	elif (state != CharacterState.DASH) and (direction == 1 and not Input.is_action_pressed("player_right")) or (direction == -1 and not Input.is_action_pressed("player_left")):
 		direction = 0
 	
-	if state != CharacterState.DASH:
+	if state == CharacterState.IDLE or state == CharacterState.WALK:
 		if Input.is_action_just_pressed("player_left"):
 			if current_time - last_left_press_time <= DOUBLE_TAP_TIME:
 				if dashes_left == 1 and (current_time - last_dash_time >= DASH_COOLDOWN): #check that dash is off cooldown
@@ -99,7 +120,18 @@ func handle_input(delta):
 			dash_state(delta)
 		
 		CharacterState.STARTUP:
+			#Noting this to remember later. Freezing the player's horizontal velocity during startup might be a problem. 
 			velocity.x = 0
+		
+		CharacterState.PUNCH:
+			animation_player.play(punch_data["active_animation"])
+			
+			punch_state(delta)
+		
+		CharacterState.RECOVERY:
+			velocity.x = move_toward(velocity.x, 0, punch_deceleration)
+			disable_hitboxes()
+			#check_for_attack()
 	
 	move_and_slide()
 
@@ -113,6 +145,10 @@ func idle_state(direction):
 		else:
 			if Input.is_action_pressed("player_jump"):
 				start_action(4, func(): start_jump(0), "jump startup")
+				
+			check_for_attack()
+			disable_hitboxes()
+			
 			velocity.x = move_toward(velocity.x, 0, 20)
 
 func walk_state(direction):
@@ -122,6 +158,7 @@ func walk_state(direction):
 		start_action(4, func(): start_jump(direction), "jump startup")
 	else:
 		velocity.x = direction * SPEED
+		check_for_attack()
 
 func start_jump(direction):
 	left_ground_check = false
@@ -153,6 +190,7 @@ func start_dash(direction):
 
 func dash_state(delta):
 	velocity.y = 0
+	check_for_attack()
 	
 	if dash_timer > 0:
 		dash_timer -= delta
@@ -160,10 +198,32 @@ func dash_state(delta):
 		last_dash_time = current_time
 		change_state(CharacterState.IDLE)
 
-#Mostly for debug. Updates the character state and prints it to the console. 
-func change_state(new_state):
-	state = new_state
-	print("Character State Updated: " + CharacterState.keys()[state])
+#This is where the code goes for the moment the punch is active. LATER ON, add the sound effect in this function.
+func start_punch():
+	attack_timer = punch_data["active_frames"] * FRAME
+	velocity.x = punch_data["forward_force"]
+	enable_punch_hitbox()
+	
+	change_state(CharacterState.PUNCH)
+
+
+func punch_state(delta):
+	velocity.x = move_toward(velocity.x, 0, punch_deceleration)
+	
+	if attack_timer > 0:
+		attack_timer -= delta
+	else:
+		start_recovery(punch_data["recovery_frames"], punch_data["recovery_animation"])
+
+func start_recovery(frames, animation):
+	change_state(CharacterState.RECOVERY)
+	
+	animation_player.play(animation)
+	var wait_time = frames * FRAME
+	var timer = get_tree().create_timer(wait_time)
+	timer.timeout.connect(func(): change_state(CharacterState.IDLE))
+	
+	
 
 func start_action(frames, continuation, animation):
 	change_state(CharacterState.STARTUP)
@@ -174,3 +234,28 @@ func start_action(frames, continuation, animation):
 	var timer = get_tree().create_timer(wait_time)
 	#print("Creating a timer for " + str(wait_time))
 	timer.timeout.connect(continuation)
+
+#Mostly for debug. Updates the character state and prints it to the console. 
+func change_state(new_state):
+	state = new_state
+	print("Character State Updated: " + CharacterState.keys()[state])
+
+func check_for_attack():
+	if Input.is_action_pressed("player_punch"):
+		start_action(punch_data["startup_frames"], func(): start_punch(), punch_data["startup_animation"])
+
+func attack_hit(target):
+	print("I'm jaking it")
+	print(target)
+
+func enable_punch_hitbox():
+	punch_hitbox.visible = true
+	punch_hitbox.set_process(true)
+	punch_hitbox.collision_layer = 2
+	punch_hitbox.collision_mask = 1
+
+func disable_hitboxes():
+	punch_hitbox.visible = false
+	punch_hitbox.set_process(false)
+	punch_hitbox.collision_layer = 0
+	punch_hitbox.collision_mask = 0

@@ -1,0 +1,149 @@
+[gd_scene load_steps=22 format=3 uid="uid://dnbp20lj7fhah"]
+
+[ext_resource type="Script" uid="uid://bxai82bd27556" path="res://Scripts/player.gd" id="1_jmwgi"]
+[ext_resource type="Texture2D" uid="uid://bkv1eebpqokq1" path="res://Assets/Player Sprites/dashb1.png" id="2_g2u8i"]
+[ext_resource type="Texture2D" uid="uid://c12ke1xq1bqrf" path="res://Assets/Player Sprites/dashb2.png" id="3_otto8"]
+[ext_resource type="Texture2D" uid="uid://basbruxqgetyk" path="res://Assets/Player Sprites/dashf1.png" id="4_8q82m"]
+[ext_resource type="Texture2D" uid="uid://15o2brjumj6l" path="res://Assets/Player Sprites/dashf2.png" id="5_epc7x"]
+[ext_resource type="Texture2D" uid="uid://b0r5j23yyt04d" path="res://Assets/Player Sprites/Idle.png" id="6_o7rgc"]
+[ext_resource type="Texture2D" uid="uid://c16sjklffnr7h" path="res://Assets/Player Sprites/Idle2.png" id="7_kdav3"]
+[ext_resource type="Texture2D" uid="uid://b6jkfhqjd1vjq" path="res://Assets/Player Sprites/jump.png" id="8_jpbtr"]
+[ext_resource type="Texture2D" uid="uid://ut1m5k3kdcpp" path="res://Assets/Player Sprites/jump startup.png" id="9_qgdfx"]
+[ext_resource type="Texture2D" uid="uid://cm10iutraqseh" path="res://Assets/Player Sprites/punch1.png" id="10_qku5p"]
+[ext_resource type="Texture2D" uid="uid://cwxfvnpt78re2" path="res://Assets/Player Sprites/recovery.png" id="11_l1fjw"]
+[ext_resource type="Texture2D" uid="uid://cjpdoeaduc5kj" path="res://Assets/Player Sprites/walkb1.png" id="12_b5wqg"]
+[ext_resource type="Texture2D" uid="uid://dvoo30d0ryex8" path="res://Assets/Player Sprites/walkb2.png" id="13_hgro5"]
+[ext_resource type="Texture2D" uid="uid://b5bs3y6tt60os" path="res://Assets/Player Sprites/walk1.png" id="14_18rq2"]
+[ext_resource type="Texture2D" uid="uid://thfvgsvr8gj5" path="res://Assets/Player Sprites/walk2.png" id="15_ccdwq"]
+[ext_resource type="Script" uid="uid://c4tm5bp6m4ur6" path="res://Scripts/hurtbox.gd" id="16_0jgdh"]
+[ext_resource type="Script" uid="uid://c2vqkmhy0bijw" path="res://Scripts/hitbox.gd" id="17_6wg26"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5tmop"]
+size = Vector2(10, 20)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_pbfsw"]
+animations = [{
+"frames": [{
+"duration": 0.4,
+"texture": ExtResource("2_g2u8i")
+}, {
+"duration": 0.4,
+"texture": ExtResource("3_otto8")
+}],
+"loop": true,
+"name": &"dash left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 0.4,
+"texture": ExtResource("4_8q82m")
+}, {
+"duration": 0.4,
+"texture": ExtResource("5_epc7x")
+}],
+"loop": true,
+"name": &"dash right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_o7rgc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_kdav3")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_jpbtr")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_qgdfx")
+}],
+"loop": true,
+"name": &"jump startup",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_qku5p")
+}],
+"loop": true,
+"name": &"punch",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11_l1fjw")
+}],
+"loop": true,
+"name": &"punch recovery",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 0.7,
+"texture": ExtResource("12_b5wqg")
+}, {
+"duration": 0.7,
+"texture": ExtResource("13_hgro5")
+}],
+"loop": true,
+"name": &"walk backward",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 0.7,
+"texture": ExtResource("14_18rq2")
+}, {
+"duration": 0.7,
+"texture": ExtResource("15_ccdwq")
+}],
+"loop": true,
+"name": &"walk forward",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_op7ga"]
+size = Vector2(10, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q13i1"]
+size = Vector2(5, 20)
+
+[node name="Player" type="CharacterBody2D"]
+script = ExtResource("1_jmwgi")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, 3)
+shape = SubResource("RectangleShape2D_5tmop")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_pbfsw")
+animation = &"idle"
+
+[node name="Startup Timer" type="Timer" parent="."]
+
+[node name="Hurtbox" type="Area2D" parent="."]
+script = ExtResource("16_0jgdh")
+metadata/_custom_type_script = "uid://c4tm5bp6m4ur6"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(-1, 3)
+shape = SubResource("RectangleShape2D_op7ga")
+
+[node name="Punch Hitbox" type="Area2D" parent="."]
+position = Vector2(5, 3)
+script = ExtResource("17_6wg26")
+metadata/_custom_type_script = "uid://c2vqkmhy0bijw"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Punch Hitbox"]
+position = Vector2(-1.5, 0)
+shape = SubResource("RectangleShape2D_q13i1")
+debug_color = Color(0.809151, 0.00220805, 0.988406, 0.42)
