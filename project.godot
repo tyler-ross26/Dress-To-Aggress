@@ -11,10 +11,10 @@ config_version=5
 [application]
 
 config/name="Dress to Aggress"
+config/tags=PackedStringArray("umkc")
 run/main_scene="uid://b1fc1024thyov"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://Assets/Sprites/icon.svg"
-config/tags=PackedStringArray("umkc")
 
 [autoload]
 

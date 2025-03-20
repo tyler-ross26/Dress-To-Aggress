@@ -4,18 +4,18 @@ class_name Wearable
 
 @export_category("Clothing Properties")
 
-@export_enum("BASE", "LEGWEAR", "SHIRT", "SHOES", "ACCESSORY") var ClothingType: String = "BASE"
-@export_enum("BASE", "COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY") var Rarity: String = "BASE"
-@export var description: String = ""
-
-@export var attackDamageChange: int
+@export_enum("BASE", "LEGWEAR", "SHIRT", "ACCESSORY") var ClothingType: String = "BASE"
+@export_enum("BASE", "COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "MYTHIC") var Rarity: String = "BASE"
+@export var attackDamageChange: float #x.x multiplier
+@export var defenseChange: float #x.x multiplier
 @export var stylePoints: int
-@export var styleMultiplier: float
-@export var speedChange: int
+@export var styleMultiplier: float #x.x multiplier
+@export var speedChange: float #x.x multiplier
 
 @export_category("Clothing Information")
 @export var outfitSet: String
 @export var outfitPattern: String
+@export var description: String
 
 @export_category("Animation Frames")
 @export var idlePose: Texture2D
@@ -32,11 +32,11 @@ func get_clothing_type() -> String:
 func get_rarity() -> String:
 	return Rarity
 	
-func get_description() -> String:
-	return description
-	
-func get_attack_damage_change() -> int:
+func get_attack_damage_change() -> float:
 	return attackDamageChange
+	
+func get_defense_change() -> float:
+	return defenseChange
 
 func get_style_points() -> int:
 	return stylePoints
@@ -44,7 +44,7 @@ func get_style_points() -> int:
 func get_style_multiplier() -> float:
 	return styleMultiplier
 
-func get_speed_change() -> int:
+func get_speed_change() -> float:
 	return speedChange
 
 func get_outfit_set() -> String:
@@ -52,7 +52,10 @@ func get_outfit_set() -> String:
 
 func get_outfit_pattern() -> String:
 	return outfitPattern
-
+	
+func get_description() -> String:
+	return description
+	
 func get_idle_pose() -> Texture2D:
 	return idlePose
 
