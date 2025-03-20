@@ -11,7 +11,12 @@ var animation_player: AnimatedSprite2D = $AnimatedSprite2D
 @onready
 var punch_hitbox: Hitbox = $"Punch Hitbox"
 
+@onready
+var enemy = get_parent().get_node("Enemy")
+var enemy_direction = 1
+
 var direction := 0
+var facing_direction = 1
 var dash_direction = 0
 var dashes_left = 1
 
@@ -26,6 +31,8 @@ var last_right_press_time = 0.0
 var last_dash_time = 0.0
 var dash_timer = 0.0
 
+var health = 100
+
 @export var DOUBLE_TAP_TIME = 0.2 # Time window for double tap detection
 @export var DASH_TIME = 0.20 # Dash lasts 0.20 seconds, lengthen this for a longer dash.
 @export var DASH_SPEED = 90 # Set dash speed
@@ -38,15 +45,17 @@ var punch_data = {
 	"startup_frames" : 4,
 	"active_frames" : 2,
 	"recovery_frames" : 7,
-	"onBlock_FA" : -3,
 	"blockstun_frames" : 11,
-	"groundHitstun": 16,
-	"airHitstun" : 16,
-	"knockback_force" : 200,
+	"onBlock_FA" : -3,
+	"ground_hitstun": 16,
+	"air_hitstun" : 16,
+	"ground_knockback_force" : 100,
+	"air_knockback_force" : 50,
+	"forward_force": 50,
+	"damage": 10,
 	"startup_animation" : "jump startup",
 	"active_animation" : "punch",
 	"recovery_animation" : "punch recovery",
-	"forward_force": 50
 }
 var punch_deceleration = 10
 
@@ -63,9 +72,13 @@ func apply_gravity(delta):
 func _physics_process(delta: float) -> void:
 	apply_gravity(delta)
 	handle_input(delta)
+	face_your_opponent()
 
 #This is the first function at the heart of the character controller functionality, called every frame. It handles taking in inputs, but also establishing what inputs are valid for each state, and calling the corresponding function for that state. 
 func handle_input(delta):
+	
+	if Input.is_action_just_pressed("DEBUG_hurt_player"):
+		get_hit_with(punch_data)
 	
 	current_time = Time.get_ticks_msec() / 1000.0  # Time in seconds
 	
@@ -101,10 +114,16 @@ func handle_input(delta):
 			idle_state(direction)
 			
 		CharacterState.WALK:
-			if direction == 1:
-				animation_player.play("walk forward")
-			else:
-				animation_player.play("walk backward")
+			if facing_direction == 1:
+				if direction == 1:
+					animation_player.play("walk forward")
+				else:
+					animation_player.play("walk backward")
+			elif facing_direction == -1:
+				if direction == 1:
+					animation_player.play("walk backward")
+				else:
+					animation_player.play("walk forward")
 			walk_state(direction)
 			
 		CharacterState.JUMP:
@@ -113,9 +132,11 @@ func handle_input(delta):
 		
 		CharacterState.DASH:
 			if dash_direction == 1:
-				animation_player.play("dash right")
+				if facing_direction == -1: animation_player.play("dash left")
+				else: animation_player.play("dash right")
 			else:
-				animation_player.play("dash left")
+				if facing_direction == -1: animation_player.play("dash right")
+				else: animation_player.play("dash left")
 				
 			dash_state(delta)
 		
@@ -125,13 +146,17 @@ func handle_input(delta):
 		
 		CharacterState.PUNCH:
 			animation_player.play(punch_data["active_animation"])
-			
 			punch_state(delta)
 		
 		CharacterState.RECOVERY:
 			velocity.x = move_toward(velocity.x, 0, punch_deceleration)
 			disable_hitboxes()
-			#check_for_attack()
+		
+		CharacterState.HURT:
+			disable_hitboxes()
+			if is_on_floor():
+				velocity.x = move_toward(velocity.x, 0, 25)
+		
 	
 	move_and_slide()
 
@@ -201,11 +226,10 @@ func dash_state(delta):
 #This is where the code goes for the moment the punch is active. LATER ON, add the sound effect in this function.
 func start_punch():
 	attack_timer = punch_data["active_frames"] * FRAME
-	velocity.x = punch_data["forward_force"]
+	velocity.x = punch_data["forward_force"] * facing_direction
 	enable_punch_hitbox()
 	
 	change_state(CharacterState.PUNCH)
-
 
 func punch_state(delta):
 	velocity.x = move_toward(velocity.x, 0, punch_deceleration)
@@ -222,8 +246,34 @@ func start_recovery(frames, animation):
 	var wait_time = frames * FRAME
 	var timer = get_tree().create_timer(wait_time)
 	timer.timeout.connect(func(): change_state(CharacterState.IDLE))
+
+func get_hit_with(attack_data):
+	change_state(CharacterState.HURT)
 	
+	animation_player.play("hurt")
+	velocity.y = 0
+	velocity.x = 0
 	
+	reduce_health(attack_data["damage"])
+	
+	#Stop all timers
+	for child in get_parent().get_children():
+		if child is Timer:
+			child.stop()
+	
+	var wait_time = 0.0
+	
+	if is_on_floor():
+		velocity.x = -1 * (facing_direction) * attack_data["ground_knockback_force"]
+		wait_time = FRAME * attack_data["ground_hitstun"]
+	else:
+		velocity.y = -1 * attack_data["air_knockback_force"]
+		velocity.x = -1 * (facing_direction) * attack_data["air_knockback_force"]
+		
+		wait_time = FRAME * attack_data["air_hitstun"]
+	
+	var timer = get_tree().create_timer(wait_time)
+	timer.timeout.connect(func(): change_state(CharacterState.IDLE))
 
 func start_action(frames, continuation, animation):
 	change_state(CharacterState.STARTUP)
@@ -247,6 +297,25 @@ func check_for_attack():
 func attack_hit(target):
 	print("I'm jaking it")
 	print(target)
+	
+	if target.has_method("get_hit_with"):
+		match state:
+			CharacterState.PUNCH:
+				print("Hitting " + str(target) + " with the almighty punch!")
+				target.get_hit_with(punch_data)
+
+func reduce_health(damage):
+	health -= damage
+	print(health)
+	print("Ouch! I've been hurt!")
+	
+	if health == 0:
+		#Handle the death logic here.
+		print("Welp. I'm dead.")
+	
+	#This is where the code would go for playing a hurt sound effect -- IF I HAD ONE!!
+	
+	#This is ALSO where we'd call on the UI to reduce the health -- IF I HAD ONE!!
 
 func enable_punch_hitbox():
 	punch_hitbox.visible = true
@@ -259,3 +328,11 @@ func disable_hitboxes():
 	punch_hitbox.set_process(false)
 	punch_hitbox.collision_layer = 0
 	punch_hitbox.collision_mask = 0
+
+func face_your_opponent():
+	enemy_direction = sign(enemy.global_position.x - global_position.x)
+	
+	if enemy_direction != 0 and enemy_direction != facing_direction:
+		print("My opponent's on the other side. Flipping!")
+		scale.x *= -1
+		facing_direction *= -1

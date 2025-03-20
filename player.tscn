@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://chyj64wwnwo67"]
+[gd_scene load_steps=23 format=3 uid="uid://chyj64wwnwo67"]
 
 [ext_resource type="Texture2D" uid="uid://bkv1eebpqokq1" path="res://Assets/Player Sprites/dashb1.png" id="1_n7ghd"]
 [ext_resource type="Script" uid="uid://bxai82bd27556" path="res://Scripts/player.gd" id="1_nvl01"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://15o2brjumj6l" path="res://Assets/Player Sprites/dashf2.png" id="4_urp6f"]
 [ext_resource type="Texture2D" uid="uid://b0r5j23yyt04d" path="res://Assets/Player Sprites/Idle.png" id="5_bwjto"]
 [ext_resource type="Texture2D" uid="uid://c16sjklffnr7h" path="res://Assets/Player Sprites/Idle2.png" id="6_606se"]
+[ext_resource type="Texture2D" uid="uid://cagujdubdoy5q" path="res://Assets/Player Sprites/hurt.png" id="6_q13i1"]
 [ext_resource type="Texture2D" uid="uid://cjpdoeaduc5kj" path="res://Assets/Player Sprites/walkb1.png" id="7_u1c27"]
 [ext_resource type="Texture2D" uid="uid://b6jkfhqjd1vjq" path="res://Assets/Player Sprites/jump.png" id="8_ivps1"]
 [ext_resource type="Texture2D" uid="uid://dvoo30d0ryex8" path="res://Assets/Player Sprites/walkb2.png" id="8_op7ga"]
@@ -43,6 +44,14 @@ animations = [{
 }],
 "loop": true,
 "name": &"dash right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_q13i1")
+}],
+"loop": true,
+"name": &"hurt",
 "speed": 5.0
 }, {
 "frames": [{
@@ -120,13 +129,20 @@ size = Vector2(5, 20)
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_nvl01")
 
+[node name="Line2D" type="Line2D" parent="."]
+position = Vector2(0.207869, 0)
+scale = Vector2(1.16696, 1)
+points = PackedVector2Array(0, 0, 20, 0)
+width = 1.245
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, 3)
 shape = SubResource("RectangleShape2D_5tmop")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_pbfsw")
-animation = &"idle"
+animation = &"hurt"
+frame_progress = 0.183957
 
 [node name="Startup Timer" type="Timer" parent="."]
 
