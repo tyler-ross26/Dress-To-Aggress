@@ -12,6 +12,7 @@ var speedChange: int
 
 var outfitSet: String
 var outfitPattern: String
+var description: String
 
 var idlePose: Texture2D
 var walkPose1: Texture2D
@@ -29,6 +30,7 @@ func _ready() -> void:
 	
 	outfitSet = wearable_resource.get_outfit_set()
 	outfitPattern = wearable_resource.get_outfit_pattern()
+	description = wearable_resource.get_description()
 	
 	idlePose = wearable_resource.get_idle_pose()
 	walkPose1 = wearable_resource.get_walk_pose1();

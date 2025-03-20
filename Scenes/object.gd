@@ -15,6 +15,7 @@ func _ready():
 	stat_box = get_child(2)
 	stat_box.visible = false
 	current_wearable = $WearableObject.get_wearable_resource() #Will Throw Error If No Resource Present
+	stat_box.text = current_wearable.description
 
 	#
 #func _process(delta):

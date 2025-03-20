@@ -7,6 +7,7 @@
 script = ExtResource("1_nim6y")
 ClothingType = "SHIRT"
 Rarity = "COMMON"
+description = "This beautiful Red Dress provides a slight damage boost!"
 attackDamageChange = 5
 stylePoints = 5
 styleMultiplier = 1.0

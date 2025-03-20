@@ -6,6 +6,7 @@ class_name Wearable
 
 @export_enum("BASE", "LEGWEAR", "SHIRT", "SHOES", "ACCESSORY") var ClothingType: String = "BASE"
 @export_enum("BASE", "COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY") var Rarity: String = "BASE"
+@export var description: String = ""
 
 @export var attackDamageChange: int
 @export var stylePoints: int
@@ -30,6 +31,9 @@ func get_clothing_type() -> String:
 	
 func get_rarity() -> String:
 	return Rarity
+	
+func get_description() -> String:
+	return description
 	
 func get_attack_damage_change() -> int:
 	return attackDamageChange
