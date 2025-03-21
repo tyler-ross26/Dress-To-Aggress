@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://b1fc1024thyov"]
+[gd_scene load_steps=10 format=3 uid="uid://b1fc1024thyov"]
 
 [ext_resource type="Script" uid="uid://b7amrd0viad8a" path="res://Scenes/drag_interaction_provider.gd" id="1_aqk2v"]
 [ext_resource type="Texture2D" uid="uid://xslp5k44t814" path="res://Assets/Sprites/dress-up-room.jpg" id="1_fj7yv"]
@@ -6,7 +6,8 @@
 [ext_resource type="PackedScene" uid="uid://cnlqn7i6s4r" path="res://Scenes/platform.tscn" id="3_tlwt5"]
 [ext_resource type="Texture2D" uid="uid://bxsk4wbibm2yg" path="res://Assets/Sprites/Model1.png" id="5_icb47"]
 [ext_resource type="Resource" uid="uid://c4w8betwkiqn6" path="res://Assets/Resources/blueShorts.tres" id="6_c28ve"]
-[ext_resource type="Resource" path="res://Assets/Resources/greenShirt.tres" id="6_sw3bl"]
+[ext_resource type="Resource" uid="uid://but5elvbkg7mi" path="res://Assets/Resources/greenShirt.tres" id="6_sw3bl"]
+[ext_resource type="PackedScene" uid="uid://dfp7lwjhqnn0k" path="res://Scenes/dressup_timer.tscn" id="8_6bvah"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aqk2v"]
 size = Vector2(1151, 52)
@@ -57,3 +58,6 @@ current_wearable = ExtResource("6_sw3bl")
 [node name="shorts" parent="." instance=ExtResource("2_tlwt5")]
 position = Vector2(357, -161)
 current_wearable = ExtResource("6_c28ve")
+
+[node name="Dressup Timer" parent="." instance=ExtResource("8_6bvah")]
+position = Vector2(-544, -282)
