@@ -43,6 +43,7 @@ func _process(delta):
 				#tween.tween_property( last_clicked.get_parent(), "position",initialPos, 0.2).set_ease(Tween.EASE_OUT)
 				
 				#last_clicked.gravity_scale = 1.0
+			last_clicked = self
 
 	
 
