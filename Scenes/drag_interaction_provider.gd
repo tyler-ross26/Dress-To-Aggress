@@ -49,6 +49,24 @@ func _process(delta):
 func _input(event):
 	# Check for left mouse button press
 	
+	#get the current outfit
+	if event is InputEventKey and Input.is_action_just_pressed("Space") and event.pressed:
+		print ("Space")
+			# Perform a collision query at the mouse position
+		var space_state = get_world_2d().direct_space_state
+		
+		var query = PhysicsPointQueryParameters2D.new()
+		query.position = $"../Platform".position
+		query.collide_with_bodies = true  # Adjust as needed
+		query.collide_with_areas = true
+		
+		var results = space_state.intersect_point(query)
+		
+		for r in results:
+			print(r.collider.get_parent().name)
+	
+	
+	#get the object that is clicked
 	if event is InputEventMouseButton and Input.is_action_just_pressed("click") and event.pressed:
 			# Get the mouse position in global (world) coordinates
 		var mouse_pos: Vector2 = get_global_mouse_position()

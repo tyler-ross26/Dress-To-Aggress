@@ -1,15 +1,19 @@
-[gd_resource type="Resource" script_class="Wearable" load_steps=2 format=3 uid="uid://c4w8betwkiqn6"]
+[gd_resource type="Resource" script_class="Wearable" load_steps=3 format=3 uid="uid://c4w8betwkiqn6"]
 
+[ext_resource type="Texture2D" uid="uid://cch084ap4rc7h" path="res://Assets/Sprites/FinalizedModelShorts.png" id="1_at7p6"]
 [ext_resource type="Script" uid="uid://0bwef23hrt6j" path="res://Scripts/Wearable.gd" id="1_xjuxa"]
 
 [resource]
 script = ExtResource("1_xjuxa")
-ClothingType = "BASE"
-Rarity = "BASE"
-attackDamageChange = 0
+ClothingType = "LEGWEAR"
+Rarity = "COMMON"
+attackDamageChange = 0.0
+defenseChange = 0.0
 stylePoints = 0
 styleMultiplier = 0.0
-speedChange = 0
-outfitSet = ""
-outfitPattern = ""
+speedChange = 0.0
+outfitSet = "Basic"
+outfitPattern = "Solid"
+description = "Red Shorts"
+idlePose = ExtResource("1_at7p6")
 metadata/_custom_type_script = "uid://0bwef23hrt6j"

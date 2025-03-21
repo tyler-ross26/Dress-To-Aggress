@@ -1,18 +1,19 @@
 [gd_resource type="Resource" script_class="Wearable" load_steps=3 format=3 uid="uid://c7mkbose27gt7"]
 
 [ext_resource type="Script" uid="uid://0bwef23hrt6j" path="res://Scripts/Wearable.gd" id="1_nim6y"]
-[ext_resource type="Texture2D" uid="uid://8n1jhvvls0pw" path="res://Assets/Sprites/dress.png" id="1_qgfuw"]
+[ext_resource type="Texture2D" uid="uid://bdjjd5fv1j1e" path="res://Assets/Sprites/FinalizedModelTankTop.png" id="1_qgfuw"]
 
 [resource]
 script = ExtResource("1_nim6y")
 ClothingType = "SHIRT"
 Rarity = "COMMON"
-description = "This beautiful Red Dress provides a slight damage boost!"
 attackDamageChange = 5
+defenseChange = 0.0
 stylePoints = 5
 styleMultiplier = 1.0
-speedChange = 0
+speedChange = 0.0
 outfitSet = "Basic"
 outfitPattern = "Solid"
+description = "This beautiful Red Shirt provides a slight damage boost!"
 idlePose = ExtResource("1_qgfuw")
 metadata/_custom_type_script = "uid://0bwef23hrt6j"
