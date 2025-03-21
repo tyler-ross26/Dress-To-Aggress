@@ -16,13 +16,21 @@ class_name Wearable
 @export var outfitSet: String
 @export var outfitPattern: String
 @export var description: String
+@export var color: Color
 
 @export_category("Animation Frames")
-@export var idlePose: Texture2D
+@export var mirrorPose: Texture2D
+@export var idlePose0: Texture2D
+@export var idlePose1: Texture2D
+@export var walkPose0: Texture2D
 @export var walkPose1: Texture2D
+@export var walkPose2: Texture2D
+@export var walkPose3: Texture2D
+@export var kickPose0: Texture2D
+@export var kickPose1: Texture2D
+@export var punchPose0: Texture2D
+@export var punchPose1: Texture2D
 @export var blockPose: Texture2D
-@export var kickPose: Texture2D
-@export var punchPose: Texture2D
 @export var hurtPose: Texture2D
 @export var Pose28: Texture2D
 
@@ -55,21 +63,27 @@ func get_outfit_pattern() -> String:
 	
 func get_description() -> String:
 	return description
+
+func get_color() -> Color:
+	return color
+	
+func get_mirror_pose() -> Texture2D:
+	return mirrorPose
 	
 func get_idle_pose() -> Texture2D:
-	return idlePose
+	return idlePose0
 
-func get_walk_pose1() -> Texture2D:
-	return walkPose1
+func get_walk_pose() -> Texture2D:
+	return walkPose0
 	
 func get_block_pose() -> Texture2D:
 	return blockPose
 
 func get_kick_pose() -> Texture2D:
-	return kickPose
+	return kickPose0
 
 func get_punch_pose() -> Texture2D:
-	return punchPose
+	return punchPose0
 
 func get_hurt_pose() -> Texture2D:
 	return hurtPose

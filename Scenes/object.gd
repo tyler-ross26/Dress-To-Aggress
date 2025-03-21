@@ -12,10 +12,11 @@ var stat_box : TextEdit
 @export var current_wearable: Wearable # WILL ERROR IF NO WEARABLE PRESENT
 
 func _ready():
+	self.modulate = current_wearable.get_color()
 	stat_box = get_child(2)
 	stat_box.visible = false
 	stat_box.text = current_wearable.get_description()
-	$Sprite2D.texture = current_wearable.get_idle_pose()
+	$Sprite2D.texture = current_wearable.get_mirror_pose()
 
 	#
 #func _process(delta):
