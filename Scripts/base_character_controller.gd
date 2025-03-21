@@ -1,4 +1,15 @@
 extends CharacterBody2D
+class_name BaseCharacterController
+
+@export var player_type  = 0  # 0 = CPU, 1 = Player 1, 2 = Player 2
+@export var enemy_name = "player1"  # Name of the enemy node
+
+# A surprise tool to help us later. Based on the player type, in a later function, these'll be redefined or left empty depending on who's controlling it. This list will be expanded with each control.
+var left_input = ""
+var right_input = ""
+var jump_input = ""
+var punch_input = ""
+var debug_hurt = ""
 
 #At the heart of the player controller, this is the ENUM that defines all the current states the player can be in. This will get longer as more states are added, and this should be the first place you go to add a new state.
 enum CharacterState { IDLE, WALK, JUMP, DASH, STARTUP, RECOVERY, PUNCH, HURT }
@@ -12,7 +23,7 @@ var animation_player: AnimatedSprite2D = $AnimatedSprite2D
 var punch_hitbox: Hitbox = $"Punch Hitbox"
 
 @onready
-var enemy = get_parent().get_node("Enemy")
+var enemy = get_parent().get_node(enemy_name)
 var enemy_direction = 1
 
 var direction := 0
@@ -64,6 +75,28 @@ var punch_deceleration = 10
 @export var VERTICAL_JUMP_VELOCITY = -250.0
 @export var HORIZONTAL_JUMP_VELOCITY = 50
 
+
+func set_controls():
+	match player_type:
+		0: 
+			print("CPU Controls Enabled. I won't do anything.")
+		1: 
+			left_input = "player_left"
+			right_input = "player_right"
+			jump_input = "player_jump"
+			punch_input = "player_punch"
+			debug_hurt = "DEBUG_hurt_player"
+			
+			print("Player 1 Controls Enabled")
+		2: 
+			left_input = "player2_left"
+			right_input = "player2_right"
+			jump_input = "player2_jump"
+			punch_input = "player2_punch"
+			debug_hurt = "DEBUG_hurt_player2"
+			
+			print("Player 2 Controls Enabled")
+
 func apply_gravity(delta):
 	if not is_on_floor():
 		#We multiply gravity times 0.8 to make it slightly slower, so mess with this in tandem with the vertical jump velocity to change the player's jumping speed.
@@ -74,24 +107,27 @@ func _physics_process(delta: float) -> void:
 	handle_input(delta)
 	face_your_opponent()
 
+func _ready():
+	set_controls()
+
 #This is the first function at the heart of the character controller functionality, called every frame. It handles taking in inputs, but also establishing what inputs are valid for each state, and calling the corresponding function for that state. 
 func handle_input(delta):
 	
-	if Input.is_action_just_pressed("DEBUG_hurt_player"):
+	if Input.is_action_just_pressed(debug_hurt):
 		get_hit_with(punch_data)
 	
 	current_time = Time.get_ticks_msec() / 1000.0  # Time in seconds
 	
-	if Input.is_action_just_pressed("player_left"):
+	if Input.is_action_just_pressed(left_input):
 		direction = -1
-	elif Input.is_action_just_pressed("player_right"):
+	elif Input.is_action_just_pressed(right_input):
 		direction = 1
-	elif (state != CharacterState.DASH) and (direction == 1 and not Input.is_action_pressed("player_right")) or (direction == -1 and not Input.is_action_pressed("player_left")):
+	elif (state != CharacterState.DASH) and (direction == 1 and not Input.is_action_pressed(right_input)) or (direction == -1 and not Input.is_action_pressed(left_input)):
 		direction = 0
 	
 	#This handles checking for the dash input, completely outside of the defined states below.
 	if state == CharacterState.IDLE or state == CharacterState.WALK:
-		if Input.is_action_just_pressed("player_left"):
+		if Input.is_action_just_pressed(left_input):
 			if current_time - last_left_press_time <= DOUBLE_TAP_TIME:
 				if dashes_left == 1 and (current_time - last_dash_time >= DASH_COOLDOWN): #check that dash is off cooldown
 					if (not is_on_floor() and MIDAIR_DASH) or (is_on_floor()):
@@ -99,7 +135,7 @@ func handle_input(delta):
 				dash_direction = -1
 			last_left_press_time = current_time
 		
-		if Input.is_action_just_pressed("player_right"):
+		if Input.is_action_just_pressed(right_input):
 			if current_time - last_right_press_time <= DOUBLE_TAP_TIME:
 				if dashes_left == 1 and (current_time - last_dash_time >= DASH_COOLDOWN):
 					if (not is_on_floor() and MIDAIR_DASH) or (is_on_floor()):
@@ -169,7 +205,7 @@ func idle_state(direction):
 		if direction: 
 			change_state(CharacterState.WALK)
 		else:
-			if Input.is_action_pressed("player_jump"):
+			if Input.is_action_pressed(jump_input):
 				start_action(4, func(): start_jump(0), "jump startup")
 				
 			check_for_attack()
@@ -180,7 +216,7 @@ func idle_state(direction):
 func walk_state(direction):
 	if direction == 0:
 		change_state(CharacterState.IDLE)
-	elif Input.is_action_pressed("player_jump") and is_on_floor():
+	elif Input.is_action_pressed(jump_input) and is_on_floor():
 		start_action(4, func(): start_jump(direction), "jump startup")
 	else:
 		velocity.x = direction * SPEED
@@ -292,7 +328,7 @@ func change_state(new_state):
 	print("Character State Updated: " + CharacterState.keys()[state])
 
 func check_for_attack():
-	if Input.is_action_pressed("player_punch"):
+	if Input.is_action_pressed(punch_input):
 		start_action(punch_data["startup_frames"], func(): start_punch(), punch_data["startup_animation"])
 
 func attack_hit(target):

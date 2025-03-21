@@ -1,10 +1,11 @@
-[gd_scene load_steps=22 format=3 uid="uid://t3yhjcrwkp18"]
+[gd_scene load_steps=23 format=3 uid="uid://bbkbsbtm0sis0"]
 
-[ext_resource type="Script" uid="uid://bxai82bd27556" path="res://Scripts/player.gd" id="1_jmwgi"]
+[ext_resource type="Script" uid="uid://digd4vhe25hc3" path="res://Scripts/player2.gd" id="1_jmwgi"]
 [ext_resource type="Texture2D" uid="uid://bkv1eebpqokq1" path="res://Assets/Player Sprites/dashb1.png" id="2_g2u8i"]
 [ext_resource type="Texture2D" uid="uid://c12ke1xq1bqrf" path="res://Assets/Player Sprites/dashb2.png" id="3_otto8"]
 [ext_resource type="Texture2D" uid="uid://basbruxqgetyk" path="res://Assets/Player Sprites/dashf1.png" id="4_8q82m"]
 [ext_resource type="Texture2D" uid="uid://15o2brjumj6l" path="res://Assets/Player Sprites/dashf2.png" id="5_epc7x"]
+[ext_resource type="Texture2D" uid="uid://cagujdubdoy5q" path="res://Assets/Player Sprites/hurt.png" id="6_g2u8i"]
 [ext_resource type="Texture2D" uid="uid://b0r5j23yyt04d" path="res://Assets/Player Sprites/Idle.png" id="6_o7rgc"]
 [ext_resource type="Texture2D" uid="uid://c16sjklffnr7h" path="res://Assets/Player Sprites/Idle2.png" id="7_kdav3"]
 [ext_resource type="Texture2D" uid="uid://b6jkfhqjd1vjq" path="res://Assets/Player Sprites/jump.png" id="8_jpbtr"]
@@ -43,6 +44,14 @@ animations = [{
 }],
 "loop": true,
 "name": &"dash right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_g2u8i")
+}],
+"loop": true,
+"name": &"hurt",
 "speed": 5.0
 }, {
 "frames": [{
@@ -115,10 +124,17 @@ animations = [{
 size = Vector2(10, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q13i1"]
-size = Vector2(5, 20)
+size = Vector2(19, 20)
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Enemy" type="CharacterBody2D"]
 script = ExtResource("1_jmwgi")
+
+[node name="Line2D" type="Line2D" parent="."]
+position = Vector2(0.207869, 0)
+scale = Vector2(1.16696, 1)
+points = PackedVector2Array(0, 0, 20, 0)
+width = 1.245
+default_color = Color(1, 0.501961, 0, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-1, 3)

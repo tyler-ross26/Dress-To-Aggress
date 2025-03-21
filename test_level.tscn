@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=4 uid="uid://dtp5eywvmmy1j"]
+[gd_scene load_steps=9 format=4 uid="uid://dtp5eywvmmy1j"]
 
 [ext_resource type="Texture2D" uid="uid://hql0e531i2dd" path="res://Assets/Streets of Fight files/Streets of Fight files/Assets/Stage Layers/tileset.png" id="1_1c2mv"]
+[ext_resource type="PackedScene" uid="uid://bbkbsbtm0sis0" path="res://enemy.tscn" id="1_4ptq8"]
 [ext_resource type="PackedScene" uid="uid://chyj64wwnwo67" path="res://player.tscn" id="2_f7g2b"]
 [ext_resource type="Script" uid="uid://c4tm5bp6m4ur6" path="res://Scripts/hurtbox.gd" id="3_f7g2b"]
 
@@ -586,7 +587,7 @@ offset = Vector2(-11, 47.595)
 zoom = Vector2(8.204, 8.62)
 
 [node name="Player" parent="." instance=ExtResource("2_f7g2b")]
-position = Vector2(1, -18)
+position = Vector2(-47, 15)
 MIDAIR_DASH = false
 
 [node name="Invisible Wall2" type="StaticBody2D" parent="."]
@@ -603,11 +604,14 @@ position = Vector2(-241, 1)
 position = Vector2(149, -15)
 shape = SubResource("RectangleShape2D_1c2mv")
 
-[node name="Enemy" type="Area2D" parent="."]
+[node name="EnemyTest" type="Area2D" parent="."]
 position = Vector2(39, 54)
 script = ExtResource("3_f7g2b")
 metadata/_custom_type_script = "uid://c4tm5bp6m4ur6"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Enemy"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest"]
 position = Vector2(-0.5, 0)
 shape = SubResource("RectangleShape2D_4ptq8")
+
+[node name="Enemy" parent="." instance=ExtResource("1_4ptq8")]
+position = Vector2(28, -21)
