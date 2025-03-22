@@ -23,11 +23,14 @@ var animation_player: AnimatedSprite2D = $AnimatedSprite2D
 var punch_hitbox: Hitbox = $"Punch Hitbox"
 
 @onready
-var enemy = get_parent().get_node(enemy_name)
+var enemy = null
 var enemy_direction = 1
 
 var direction := 0
 var facing_direction = 1
+var horizontal_distance = 0
+var vertical_distance = 0
+
 var dash_direction = 0
 var dashes_left = 1
 
@@ -108,13 +111,20 @@ func _physics_process(delta: float) -> void:
 	face_your_opponent()
 
 func _ready():
+	enemy = get_parent().get_node(enemy_name)
+	
+	if enemy == null:
+		push_error("Enemy node '%s' not found!" % enemy_name)
+	
+	
 	set_controls()
 
 #This is the first function at the heart of the character controller functionality, called every frame. It handles taking in inputs, but also establishing what inputs are valid for each state, and calling the corresponding function for that state. 
 func handle_input(delta):
 	
-	if Input.is_action_just_pressed(debug_hurt):
-		get_hit_with(punch_data)
+	if Input.is_action_pressed(debug_hurt):
+		Engine.set_time_scale(0.5)
+		#get_hit_with(punch_data)
 	
 	current_time = Time.get_ticks_msec() / 1000.0  # Time in seconds
 	
@@ -126,10 +136,11 @@ func handle_input(delta):
 		direction = 0
 	
 	#This handles checking for the dash input, completely outside of the defined states below.
-	if state == CharacterState.IDLE or state == CharacterState.WALK:
+	if state == CharacterState.IDLE or state == CharacterState.WALK or state == CharacterState.JUMP:
 		if Input.is_action_just_pressed(left_input):
 			if current_time - last_left_press_time <= DOUBLE_TAP_TIME:
 				if dashes_left == 1 and (current_time - last_dash_time >= DASH_COOLDOWN): #check that dash is off cooldown
+					print(MIDAIR_DASH)
 					if (not is_on_floor() and MIDAIR_DASH) or (is_on_floor()):
 						start_dash(-1)
 				dash_direction = -1
@@ -193,7 +204,6 @@ func handle_input(delta):
 			disable_hitboxes()
 			if is_on_floor():
 				velocity.x = move_toward(velocity.x, 0, 25)
-		
 	
 	move_and_slide()
 
@@ -359,17 +369,37 @@ func enable_punch_hitbox():
 	punch_hitbox.set_process(true)
 	punch_hitbox.collision_layer = 2
 	punch_hitbox.collision_mask = 1
+	
+	punch_hitbox.set_deferred("monitoring", true) # Enable detection
+	punch_hitbox.set_deferred("monitorable", true) # Enable collision
 
 func disable_hitboxes():
-	punch_hitbox.visible = false
-	punch_hitbox.set_process(false)
-	punch_hitbox.collision_layer = 0
-	punch_hitbox.collision_mask = 0
+	for child in get_children():
+		if child is Hitbox:
+			child.visible = false
+			child.set_process(false)
+			child.collision_layer = 0
+			child.collision_mask = 0
+			child.set_deferred("monitoring", false)
+			child.set_deferred("monitorable", false)
 
 func face_your_opponent():
 	enemy_direction = sign(enemy.global_position.x - global_position.x)
+	horizontal_distance = abs(enemy.global_position.x - global_position.x)
+	vertical_distance = enemy.global_position.y - global_position.y
 	
-	if enemy_direction != 0 and enemy_direction != facing_direction:
+	#if (player_type == 1): print("Horizontal: " + str(horizontal_distance))
+	#if (player_type == 1):
+		#print("Vertical: " + str(vertical_distance))
+		#print(is_on_floor())
+	
+	if (horizontal_distance < 7) and (vertical_distance > 19) and is_on_floor():
+		print("I'm standing on top of him.") 
+		velocity.y = -30
+		velocity.x = facing_direction * -1 * 50
+	if (horizontal_distance < 0.5) and (vertical_distance > 19) and is_on_floor():
+		print("RANDOM BULLSHIT GO")
+	elif enemy_direction != 0 and enemy_direction != facing_direction and not (horizontal_distance < 0.5):
 		print("My opponent's on the other side. Flipping!")
 		scale.x *= -1
 		facing_direction *= -1
