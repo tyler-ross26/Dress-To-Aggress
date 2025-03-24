@@ -1,0 +1,39 @@
+[gd_scene load_steps=8 format=3 uid="uid://cncif5fdaqbyd"]
+
+[ext_resource type="Script" uid="uid://c12shv00mnant" path="res://Scenes/GenerateAnimationLayre.gd" id="1_c8tcj"]
+[ext_resource type="Resource" uid="uid://c4w8betwkiqn6" path="res://Assets/Resources/blueShorts.tres" id="2_dnq0y"]
+[ext_resource type="Resource" uid="uid://bqsttykalac5f" path="res://Assets/Resources/body.tres" id="4_f8v3u"]
+[ext_resource type="Resource" uid="uid://c7mkbose27gt7" path="res://Assets/Resources/redShirt.tres" id="5_m2xbj"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_m2xbj"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dnq0y"]
+animations = [{
+"frames": [],
+"loop": true,
+"name": &"default",
+"speed": 1.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_x7cev"]
+
+[node name="AnimationTesting" type="Node2D"]
+
+[node name="Body" type="AnimatedSprite2D" parent="."]
+position = Vector2(353, 282)
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_m2xbj")
+script = ExtResource("1_c8tcj")
+current_wearable = ExtResource("4_f8v3u")
+
+[node name="PantsLayer" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_dnq0y")
+script = ExtResource("1_c8tcj")
+current_wearable = ExtResource("2_dnq0y")
+
+[node name="Shirt Layer" type="AnimatedSprite2D" parent="."]
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_x7cev")
+script = ExtResource("1_c8tcj")
+current_wearable = ExtResource("5_m2xbj")

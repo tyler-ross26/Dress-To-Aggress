@@ -70,21 +70,39 @@ func get_color() -> Color:
 func get_mirror_pose() -> Texture2D:
 	return mirrorPose
 	
-func get_idle_pose() -> Texture2D:
+func get_idle_pose0() -> Texture2D:
 	return idlePose0
 
-func get_walk_pose() -> Texture2D:
+func get_idle_pose1() -> Texture2D:
+	return idlePose1
+
+func get_walk_pose0() -> Texture2D:
 	return walkPose0
+	
+func get_walk_pose1() -> Texture2D:
+	return walkPose1
+	
+func get_walk_pose2() -> Texture2D:
+	return walkPose2
+	
+func get_walk_pose3() -> Texture2D:
+	return walkPose3
 	
 func get_block_pose() -> Texture2D:
 	return blockPose
 
-func get_kick_pose() -> Texture2D:
+func get_kick_pose0() -> Texture2D:
 	return kickPose0
 
-func get_punch_pose() -> Texture2D:
-	return punchPose0
+func get_kick_pose1() -> Texture2D:
+	return kickPose1
 
+func get_punch_pose0() -> Texture2D:
+	return punchPose0
+	
+func get_punch_pose1() -> Texture2D:
+	return punchPose1
+	
 func get_hurt_pose() -> Texture2D:
 	return hurtPose
 

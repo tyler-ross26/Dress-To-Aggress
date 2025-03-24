@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="Wearable" load_steps=13 format=3 uid="uid://bqsttykalac5f"]
+
+[ext_resource type="Texture2D" uid="uid://c8soxhnp07fxn" path="res://Assets/Sprites/Clothing Frames/headless body poses/Idle Frames/IdleBody0.png" id="1_yf0vu"]
+[ext_resource type="Texture2D" uid="uid://10csj17hj4nd" path="res://Assets/Sprites/Clothing Frames/headless body poses/Idle Frames/IdleBody1.png" id="2_e765a"]
+[ext_resource type="Texture2D" uid="uid://b2kus4ktmum7q" path="res://Assets/Sprites/Clothing Frames/headless body poses/Kick Frames/KickBody1.png" id="3_yf0vu"]
+[ext_resource type="Texture2D" uid="uid://c10oecpuoipjt" path="res://Assets/Sprites/Clothing Frames/headless body poses/Kick Frames/KickBody2.png" id="4_e765a"]
+[ext_resource type="Texture2D" uid="uid://d4mitgebpydng" path="res://Assets/Sprites/Clothing Frames/shorts/Mirror Frames/FinalizedModelShorts.png" id="5_x60y8"]
+[ext_resource type="Texture2D" uid="uid://85encrojkxgv" path="res://Assets/Sprites/Clothing Frames/headless body poses/Punch Frames/PunchBody1.png" id="6_7x5ig"]
+[ext_resource type="Texture2D" uid="uid://bln4n2n3i5igj" path="res://Assets/Sprites/Clothing Frames/headless body poses/Punch Frames/PunchBody2.png" id="7_6srg8"]
+[ext_resource type="Script" uid="uid://0bwef23hrt6j" path="res://Scripts/Wearable.gd" id="8_tkqwu"]
+[ext_resource type="Texture2D" uid="uid://doux2ea68ssvb" path="res://Assets/Sprites/Clothing Frames/headless body poses/Walk Frames/WalkBody0.png" id="9_yf0vu"]
+[ext_resource type="Texture2D" uid="uid://bs7dtultrp7xb" path="res://Assets/Sprites/Clothing Frames/headless body poses/Walk Frames/WalkBody1.png" id="10_e765a"]
+[ext_resource type="Texture2D" uid="uid://dgqti86shnilu" path="res://Assets/Sprites/Clothing Frames/headless body poses/Walk Frames/WalkBody2.png" id="11_7x5ig"]
+[ext_resource type="Texture2D" uid="uid://dhtp4pcwr7ma" path="res://Assets/Sprites/Clothing Frames/headless body poses/Walk Frames/WalkBody3.png" id="12_6srg8"]
+
+[resource]
+script = ExtResource("8_tkqwu")
+ClothingType = "BASE"
+Rarity = "BASE"
+attackDamageChange = 0.0
+defenseChange = 0.0
+stylePoints = 0
+styleMultiplier = 0.0
+speedChange = 0.0
+outfitSet = ""
+outfitPattern = ""
+description = ""
+color = Color(1, 1, 1, 1)
+mirrorPose = ExtResource("5_x60y8")
+idlePose0 = ExtResource("1_yf0vu")
+idlePose1 = ExtResource("2_e765a")
+walkPose0 = ExtResource("9_yf0vu")
+walkPose1 = ExtResource("10_e765a")
+walkPose2 = ExtResource("11_7x5ig")
+walkPose3 = ExtResource("12_6srg8")
+kickPose0 = ExtResource("3_yf0vu")
+kickPose1 = ExtResource("4_e765a")
+punchPose0 = ExtResource("6_7x5ig")
+punchPose1 = ExtResource("7_6srg8")
+metadata/_custom_type_script = "uid://0bwef23hrt6j"
