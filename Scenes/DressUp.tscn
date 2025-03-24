@@ -60,4 +60,5 @@ position = Vector2(357, -161)
 current_wearable = ExtResource("6_c28ve")
 
 [node name="Dressup Timer" parent="." instance=ExtResource("8_6bvah")]
+modulate = Color(0.662085, 0.11511, 0.191862, 1)
 position = Vector2(-544, -282)

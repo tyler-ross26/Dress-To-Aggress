@@ -20,6 +20,10 @@ config/icon="res://Assets/Sprites/icon.svg"
 
 global="*res://Scenes/global.gd"
 
+[display]
+
+window/stretch/mode="viewport"
+
 [input]
 
 click={

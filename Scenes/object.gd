@@ -18,6 +18,9 @@ func _ready():
 	stat_box.text = current_wearable.get_description()
 	$Sprite2D.texture = current_wearable.get_mirror_pose()
 
+
+func get_current_wearable() -> Wearable:
+	return current_wearable
 	#
 #func _process(delta):
 	#if not started:

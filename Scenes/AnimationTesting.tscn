@@ -20,6 +20,7 @@ animations = [{
 [node name="AnimationTesting" type="Node2D"]
 
 [node name="Body" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
 position = Vector2(353, 282)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_m2xbj")
@@ -27,12 +28,14 @@ script = ExtResource("1_c8tcj")
 current_wearable = ExtResource("4_f8v3u")
 
 [node name="PantsLayer" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_dnq0y")
 script = ExtResource("1_c8tcj")
 current_wearable = ExtResource("2_dnq0y")
 
-[node name="Shirt Layer" type="AnimatedSprite2D" parent="."]
+[node name="ShirtLayer" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_x7cev")
 script = ExtResource("1_c8tcj")

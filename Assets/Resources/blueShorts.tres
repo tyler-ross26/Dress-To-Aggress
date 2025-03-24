@@ -22,6 +22,7 @@ defenseChange = 0.0
 stylePoints = 0
 styleMultiplier = 0.0
 speedChange = 0.0
+name = "blueShorts"
 outfitSet = "Basic"
 outfitPattern = "Solid"
 description = "blue Shorts"

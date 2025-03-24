@@ -13,6 +13,7 @@ class_name Wearable
 @export var speedChange: float #x.x multiplier
 
 @export_category("Clothing Information")
+@export var name: String
 @export var outfitSet: String
 @export var outfitPattern: String
 @export var description: String
@@ -54,6 +55,9 @@ func get_style_multiplier() -> float:
 
 func get_speed_change() -> float:
 	return speedChange
+
+func get_outfit_name() -> String:
+	return name
 
 func get_outfit_set() -> String:
 	return outfitSet

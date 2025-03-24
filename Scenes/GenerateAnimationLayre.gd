@@ -7,14 +7,30 @@ extends AnimatedSprite2D
 @onready
 var animation_player: AnimatedSprite2D
 
+
 func  _ready() -> void:
 
 	animation_player = self
 	
+	var textFile = "res://Assets/OutfitSaveFile.txt"
+	var file  = FileAccess.open(textFile, FileAccess.READ)
+	var shirt_text =  file.get_as_text().get_slice(",",1)
+	var pants_text =  file.get_as_text().get_slice(",",0)
+
+
+	print(pants_text+","+shirt_text)
+	
+	if self.name == "PantsLayer":
+		self.current_wearable = load("res://Assets/Resources/"+pants_text+".tres")
+		
+	
+	if self.name == "ShirtLayer":
+		self.current_wearable = load("res://Assets/Resources/"+shirt_text+".tres")
 	
 	self.position  = $"../Body".position
 	self.scale = Vector2(3.0,3.0)
 	self.modulate = current_wearable.color
+	 
 	
 	animation_player.sprite_frames = SpriteFrames.new()
 	createAnimation("idle")
