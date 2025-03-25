@@ -50,6 +50,8 @@ var dash_timer = 0.0
 
 var health = 100
 
+var cancellable = true
+
 @export var DOUBLE_TAP_TIME = 0.2 # Time window for double tap detection
 @export var DASH_TIME = 0.20 # Dash lasts 0.20 seconds, lengthen this for a longer dash.
 @export var DASH_SPEED = 90 # Set dash speed
@@ -59,13 +61,13 @@ var health = 100
 #Note for the below data: onBlock is positive because, if an attack is blocked, the player will transition to the RECOVERY state for (recovery + onBlock) frames. 
 var attack_timer = 0.0
 var punch_data = {
-	"startup_frames" : 4,
-	"active_frames" : 2,
-	"recovery_frames" : 7,
+	"startup_frames" : 6,
+	"active_frames" : 4,
+	"recovery_frames" : 11,
 	"blockstun_frames" : 11,
 	"onBlock_FA" : -3,
-	"ground_hitstun": 16,
-	"air_hitstun" : 16,
+	"ground_hitstun": 20,
+	"air_hitstun" : 20,
 	"ground_knockback_force" : 100,
 	"air_knockback_force" : 50,
 	"forward_force": 0,
@@ -122,6 +124,12 @@ func set_controls():
 			
 			print("Player 2 Controls Enabled")
 
+func stop_all_timers():
+	for child in get_children():
+		if child is Timer:
+			print(child)
+			child.stop()
+
 func apply_gravity(delta):
 	if not is_on_floor():
 		#We multiply gravity times 0.8 to make it slightly slower, so mess with this in tandem with the vertical jump velocity to change the player's jumping speed.
@@ -143,6 +151,9 @@ func _ready():
 
 #This is the first function at the heart of the character controller functionality, called every frame. It handles taking in inputs, but also establishing what inputs are valid for each state, and calling the corresponding function for that state. 
 func handle_input(delta):
+	
+	#if health <= 0:
+	#	state = CharacterState.HURT
 	
 	if Input.is_action_pressed(debug_hurt):
 		#Engine.set_time_scale(0.5)
@@ -224,6 +235,7 @@ func handle_input(delta):
 		
 		CharacterState.RECOVERY:
 			velocity.x = move_toward(velocity.x, 0, punch_deceleration)
+			if cancellable: check_for_attack()
 			disable_hitboxes()
 		
 		CharacterState.HURT:
@@ -246,6 +258,8 @@ func idle_state(direction):
 				
 			check_for_attack()
 			disable_hitboxes()
+			
+			cancellable = false
 			
 			velocity.x = move_toward(velocity.x, 0, 20)
 
@@ -301,6 +315,7 @@ func start_punch():
 	attack_timer = punch_data["active_frames"] * FRAME
 	velocity.x = punch_data["forward_force"] * facing_direction
 	enable_punch_hitbox()
+	cancellable = true
 	
 	change_state(CharacterState.PUNCH)
 
@@ -345,17 +360,16 @@ func get_hit_with(attack_data):
 	
 	reduce_health(attack_data["damage"])
 	
-	#Stop all timers
-	for child in get_parent().get_children():
-		if child is Timer:
-			child.stop()
+	stop_all_timers()
 	
 	var wait_time = 0.0
 	
 	if is_on_floor():
 		velocity.x = -1 * (facing_direction) * attack_data["ground_knockback_force"]
 		wait_time = FRAME * attack_data["ground_hitstun"]
+		stop_all_timers()
 	else:
+		stop_all_timers()
 		velocity.y = -1 * attack_data["air_knockback_force"]
 		velocity.x = -1 * (facing_direction) * attack_data["air_knockback_force"]
 		
@@ -377,13 +391,15 @@ func start_action(frames, continuation, animation):
 #Mostly for debug. Updates the character state and prints it to the console. 
 func change_state(new_state):
 	state = new_state
-	print("Character State Updated: " + CharacterState.keys()[state])
+	#print("Character State Updated: " + CharacterState.keys()[state])
 
 func check_for_attack():
 	if Input.is_action_pressed(punch_input):
+		stop_all_timers()
 		start_action(punch_data["startup_frames"], func(): start_punch(), punch_data["startup_animation"])
 	
 	if Input.is_action_pressed(kick_input):
+		stop_all_timers()
 		start_action(kick_data["startup_frames"], func(): start_kick(), kick_data["startup_animation"])
 
 func attack_hit(target):
@@ -407,8 +423,7 @@ func reduce_health(damage):
 	
 	if health <= 0:
 		#Handle the death logic here.
-		while true:
-			change_state(CharacterState.HURT)
+		print("Welp, guess I'm dead!")
 	
 	#This is where the code would go for playing a hurt sound effect -- IF I HAD ONE!!
 	
