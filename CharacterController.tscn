@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://chyj64wwnwo67"]
+[gd_scene load_steps=26 format=3 uid="uid://chyj64wwnwo67"]
 
 [ext_resource type="Texture2D" uid="uid://bkv1eebpqokq1" path="res://Assets/Player Sprites/dashb1.png" id="1_n7ghd"]
 [ext_resource type="Script" uid="uid://cmdthl362buy2" path="res://Scripts/base_character_controller.gd" id="1_q13i1"]
@@ -16,6 +16,8 @@
 [ext_resource type="Texture2D" uid="uid://cm10iutraqseh" path="res://Assets/Player Sprites/punch1.png" id="10_bwjto"]
 [ext_resource type="Texture2D" uid="uid://thfvgsvr8gj5" path="res://Assets/Player Sprites/walk2.png" id="10_pylmc"]
 [ext_resource type="Texture2D" uid="uid://cwxfvnpt78re2" path="res://Assets/Player Sprites/recovery.png" id="11_606se"]
+[ext_resource type="Texture2D" uid="uid://b4jlqe73vpn3r" path="res://Assets/Player Sprites/kick1.png" id="11_upuld"]
+[ext_resource type="Texture2D" uid="uid://ip3b5f2j2e6l" path="res://Assets/Player Sprites/kickrecovery.png" id="12_bnttp"]
 [ext_resource type="Script" uid="uid://c4tm5bp6m4ur6" path="res://Scripts/hurtbox.gd" id="16_u1c27"]
 [ext_resource type="Script" uid="uid://c2vqkmhy0bijw" path="res://Scripts/hitbox.gd" id="17_op7ga"]
 
@@ -83,6 +85,22 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": ExtResource("11_upuld")
+}],
+"loop": true,
+"name": &"kick",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("12_bnttp")
+}],
+"loop": true,
+"name": &"kick recovery",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": ExtResource("10_bwjto")
 }],
 "loop": true,
@@ -126,6 +144,9 @@ size = Vector2(10, 20)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q13i1"]
 size = Vector2(14, 20)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yu3r3"]
+size = Vector2(23, 30)
+
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_q13i1")
 
@@ -141,7 +162,7 @@ shape = SubResource("RectangleShape2D_5tmop")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_pbfsw")
-animation = &"idle"
+animation = &"kick"
 
 [node name="Startup Timer" type="Timer" parent="."]
 
@@ -162,3 +183,13 @@ metadata/_custom_type_script = "uid://c2vqkmhy0bijw"
 position = Vector2(1, 0)
 shape = SubResource("RectangleShape2D_q13i1")
 debug_color = Color(0.809151, 0.00220805, 0.988406, 0.42)
+
+[node name="Kick Hitbox" type="Area2D" parent="."]
+position = Vector2(5, 3)
+script = ExtResource("17_op7ga")
+metadata/_custom_type_script = "uid://c2vqkmhy0bijw"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Kick Hitbox"]
+position = Vector2(5.5, -5)
+shape = SubResource("RectangleShape2D_yu3r3")
+debug_color = Color(0.786632, 0.431925, 0, 0.42)

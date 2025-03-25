@@ -9,10 +9,11 @@ var left_input = ""
 var right_input = ""
 var jump_input = ""
 var punch_input = ""
+var kick_input
 var debug_hurt = ""
 
 #At the heart of the player controller, this is the ENUM that defines all the current states the player can be in. This will get longer as more states are added, and this should be the first place you go to add a new state.
-enum CharacterState { IDLE, WALK, JUMP, DASH, STARTUP, RECOVERY, PUNCH, HURT }
+enum CharacterState { IDLE, WALK, JUMP, DASH, STARTUP, RECOVERY, PUNCH, KICK, HURT }
 var state = CharacterState.IDLE
 var left_ground_check = false
 
@@ -23,6 +24,8 @@ var animation_player: AnimatedSprite2D = $AnimatedSprite2D
 var punch_hitbox: Hitbox = $"Punch Hitbox"
 
 @onready
+var kick_hitbox = $"Kick Hitbox"
+
 var enemy = null
 var enemy_direction = 1
 
@@ -65,13 +68,30 @@ var punch_data = {
 	"air_hitstun" : 16,
 	"ground_knockback_force" : 100,
 	"air_knockback_force" : 50,
-	"forward_force": 50,
+	"forward_force": 0,
 	"damage": 10,
 	"startup_animation" : "jump startup",
 	"active_animation" : "punch",
 	"recovery_animation" : "punch recovery",
 }
 var punch_deceleration = 10
+
+var kick_data = {
+	"startup_frames" : 14,
+	"active_frames" : 6,
+	"recovery_frames" : 18,
+	"blockstun_frames" : 15,
+	"onBlock_FA" : -8,
+	"ground_hitstun": 22,
+	"air_hitstun" : 22,
+	"ground_knockback_force" : 300,
+	"air_knockback_force" : 100,
+	"forward_force": 100,
+	"damage": 30,
+	"startup_animation" : "jump startup",
+	"active_animation" : "kick",
+	"recovery_animation" : "kick recovery",
+}
 
 #Defines the player's walk speed, and jump speeds.
 @export var SPEED = 20.0
@@ -88,6 +108,7 @@ func set_controls():
 			right_input = "player_right"
 			jump_input = "player_jump"
 			punch_input = "player_punch"
+			kick_input = "player_kick"
 			debug_hurt = "DEBUG_hurt_player"
 			
 			print("Player 1 Controls Enabled")
@@ -96,6 +117,7 @@ func set_controls():
 			right_input = "player2_right"
 			jump_input = "player2_jump"
 			punch_input = "player2_punch"
+			kick_input = "player2_kick"
 			debug_hurt = "DEBUG_hurt_player2"
 			
 			print("Player 2 Controls Enabled")
@@ -123,8 +145,8 @@ func _ready():
 func handle_input(delta):
 	
 	if Input.is_action_pressed(debug_hurt):
-		Engine.set_time_scale(0.5)
-		#get_hit_with(punch_data)
+		#Engine.set_time_scale(0.5)
+		get_hit_with(punch_data)
 	
 	current_time = Time.get_ticks_msec() / 1000.0  # Time in seconds
 	
@@ -195,6 +217,10 @@ func handle_input(delta):
 		CharacterState.PUNCH:
 			animation_player.play(punch_data["active_animation"])
 			punch_state(delta)
+		
+		CharacterState.KICK:
+			animation_player.play(kick_data["active_animation"])
+			kick_state(delta)
 		
 		CharacterState.RECOVERY:
 			velocity.x = move_toward(velocity.x, 0, punch_deceleration)
@@ -286,6 +312,22 @@ func punch_state(delta):
 	else:
 		start_recovery(punch_data["recovery_frames"], punch_data["recovery_animation"])
 
+#This is where the code goes for the moment the punch is active. LATER ON, add the sound effect in this function.
+func start_kick():
+	attack_timer = kick_data["active_frames"] * FRAME
+	velocity.x = kick_data["forward_force"] * facing_direction
+	enable_kick_hitbox()
+	
+	change_state(CharacterState.KICK)
+
+func kick_state(delta):
+	velocity.x = move_toward(velocity.x, 0, punch_deceleration)
+	
+	if attack_timer > 0:
+		attack_timer -= delta
+	else:
+		start_recovery(kick_data["recovery_frames"], kick_data["recovery_animation"])
+
 func start_recovery(frames, animation):
 	change_state(CharacterState.RECOVERY)
 	
@@ -340,6 +382,9 @@ func change_state(new_state):
 func check_for_attack():
 	if Input.is_action_pressed(punch_input):
 		start_action(punch_data["startup_frames"], func(): start_punch(), punch_data["startup_animation"])
+	
+	if Input.is_action_pressed(kick_input):
+		start_action(kick_data["startup_frames"], func(): start_kick(), kick_data["startup_animation"])
 
 func attack_hit(target):
 	print("I'm jaking it")
@@ -350,15 +395,20 @@ func attack_hit(target):
 			CharacterState.PUNCH:
 				print("Hitting " + str(target) + " with the almighty punch!")
 				target.get_hit_with(punch_data)
+			
+			CharacterState.KICK:
+				print("Hitting " + str(target) + " with the almighty kick!")
+				target.get_hit_with(kick_data)
 
 func reduce_health(damage):
 	health -= damage
 	print(health)
 	print("Ouch! I've been hurt!")
 	
-	if health == 0:
+	if health <= 0:
 		#Handle the death logic here.
-		print("Welp. I'm dead.")
+		while true:
+			change_state(CharacterState.HURT)
 	
 	#This is where the code would go for playing a hurt sound effect -- IF I HAD ONE!!
 	
@@ -373,6 +423,15 @@ func enable_punch_hitbox():
 	punch_hitbox.set_deferred("monitoring", true) # Enable detection
 	punch_hitbox.set_deferred("monitorable", true) # Enable collision
 
+func enable_kick_hitbox():
+	kick_hitbox.visible = true
+	kick_hitbox.set_process(true)
+	kick_hitbox.collision_layer = 2
+	kick_hitbox.collision_mask = 1
+	
+	kick_hitbox.set_deferred("monitoring", true) # Enable detection
+	kick_hitbox.set_deferred("monitorable", true) # Enable collision
+
 func disable_hitboxes():
 	for child in get_children():
 		if child is Hitbox:
@@ -384,6 +443,8 @@ func disable_hitboxes():
 			child.set_deferred("monitorable", false)
 
 func face_your_opponent():
+	if not (state == CharacterState.IDLE or state == CharacterState.WALK): return
+	 
 	enemy_direction = sign(enemy.global_position.x - global_position.x)
 	horizontal_distance = abs(enemy.global_position.x - global_position.x)
 	vertical_distance = enemy.global_position.y - global_position.y
@@ -393,7 +454,7 @@ func face_your_opponent():
 		#print("Vertical: " + str(vertical_distance))
 		#print(is_on_floor())
 	
-	if (horizontal_distance < 7) and (vertical_distance > 19) and is_on_floor():
+	if (horizontal_distance < 8) and (vertical_distance > 19) and is_on_floor():
 		print("I'm standing on top of him.") 
 		velocity.y = -30
 		velocity.x = facing_direction * -1 * 50
