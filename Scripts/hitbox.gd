@@ -15,9 +15,13 @@ func on_area_entered(hurtbox: Hurtbox) -> void:
 	var hitbox_parent = get_parent()
 	
 	if (hitbox_parent == hurtbox_parent): return
-	
-	if (hitbox_parent.has_method("attack_hit")):
+
+	if "block_legal" in hurtbox_parent and hurtbox_parent.block_legal == true:
+		print("Damn, they blocked!")
+		hitbox_parent.attack_was_blocked(hurtbox_parent)
+	elif (hitbox_parent.has_method("attack_hit")):
+		print("Hitbox hit something!")
 		hitbox_parent.attack_hit(hurtbox_parent)
 	
 	#Deal damage
-	print("Hitbox hit something!")
+	

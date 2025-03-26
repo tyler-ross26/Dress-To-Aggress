@@ -4,16 +4,27 @@ class_name BaseCharacterController
 @export var player_type  = 0  # 0 = CPU, 1 = Player 1, 2 = Player 2
 @export var enemy_name = "player1"  # Name of the enemy node
 
+#Brainstorm comment.
+'''
+If player's walking away from the opponent and they're on the ground, set block_legal to true. 
+On the hitbox, if I hit a player who's block_legal is set to true, start my user's Attack_Blocked() function and send it the target
+Attack_Was_Blocked() -- Start recovery for recovery frames + onBlockFA * -1, call opponent's Block_Attack(), negate horizontal speed
+Block_Attack() -- Set state to BLOCK, take negative x velocity of half of the attack's knockback, set block_timer to the given attack's blockstun frames
+
+In BLOCK state, play block animation, call block_state()
+In block_state(), slow down at regular speed, decrement block_timer by delta until it's 0 and change_state(CharacterState.IDLE)
+'''
+
 # A surprise tool to help us later. Based on the player type, in a later function, these'll be redefined or left empty depending on who's controlling it. This list will be expanded with each control.
 var left_input = ""
 var right_input = ""
 var jump_input = ""
 var punch_input = ""
-var kick_input
+var kick_input = ""
 var debug_hurt = ""
 
 #At the heart of the player controller, this is the ENUM that defines all the current states the player can be in. This will get longer as more states are added, and this should be the first place you go to add a new state.
-enum CharacterState { IDLE, WALK, JUMP, DASH, STARTUP, RECOVERY, PUNCH, KICK, HURT }
+enum CharacterState { IDLE, WALK, JUMP, DASH, STARTUP, RECOVERY, PUNCH, KICK, HURT, BLOCK }
 var state = CharacterState.IDLE
 var left_ground_check = false
 
@@ -52,6 +63,9 @@ var health = 100
 
 var cancellable = true
 
+var block_legal = false
+var block_timer = 0.0
+
 @export var DOUBLE_TAP_TIME = 0.2 # Time window for double tap detection
 @export var DASH_TIME = 0.20 # Dash lasts 0.20 seconds, lengthen this for a longer dash.
 @export var DASH_SPEED = 90 # Set dash speed
@@ -86,7 +100,7 @@ var kick_data = {
 	"onBlock_FA" : -8,
 	"ground_hitstun": 22,
 	"air_hitstun" : 22,
-	"ground_knockback_force" : 300,
+	"ground_knockback_force" : 200,
 	"air_knockback_force" : 100,
 	"forward_force": 100,
 	"damage": 30,
@@ -152,9 +166,6 @@ func _ready():
 #This is the first function at the heart of the character controller functionality, called every frame. It handles taking in inputs, but also establishing what inputs are valid for each state, and calling the corresponding function for that state. 
 func handle_input(delta):
 	
-	#if health <= 0:
-	#	state = CharacterState.HURT
-	
 	if Input.is_action_pressed(debug_hurt):
 		#Engine.set_time_scale(0.5)
 		get_hit_with(punch_data)
@@ -187,6 +198,8 @@ func handle_input(delta):
 				dash_direction = 1
 			last_right_press_time = current_time
 	
+	if direction == 0: block_legal = false
+	
 	#To add a new state, just add a new match case for that specific state, and similarly include the animation to be played and a call for that state's function. 
 	match state:
 		
@@ -205,6 +218,10 @@ func handle_input(delta):
 					animation_player.play("walk backward")
 				else:
 					animation_player.play("walk forward")
+			
+			if (direction == facing_direction * -1): block_legal = true
+			else: block_legal = false
+			
 			walk_state(direction)
 		
 		CharacterState.JUMP:
@@ -242,6 +259,11 @@ func handle_input(delta):
 			disable_hitboxes()
 			if is_on_floor():
 				velocity.x = move_toward(velocity.x, 0, 25)
+		
+		CharacterState.BLOCK:
+			animation_player.play("block")
+			disable_hitboxes()
+			block_state(delta)
 	
 	move_and_slide()
 
@@ -312,6 +334,8 @@ func dash_state(delta):
 
 #This is where the code goes for the moment the punch is active. LATER ON, add the sound effect in this function.
 func start_punch():
+	if (state != CharacterState.STARTUP): return
+	
 	attack_timer = punch_data["active_frames"] * FRAME
 	velocity.x = punch_data["forward_force"] * facing_direction
 	enable_punch_hitbox()
@@ -329,6 +353,10 @@ func punch_state(delta):
 
 #This is where the code goes for the moment the punch is active. LATER ON, add the sound effect in this function.
 func start_kick():
+	if (state != CharacterState.STARTUP): 
+		print("You're not in startup phase!")
+		print(state == CharacterState.STARTUP)
+	
 	attack_timer = kick_data["active_frames"] * FRAME
 	velocity.x = kick_data["forward_force"] * facing_direction
 	enable_kick_hitbox()
@@ -343,7 +371,17 @@ func kick_state(delta):
 	else:
 		start_recovery(kick_data["recovery_frames"], kick_data["recovery_animation"])
 
+#In block_state(), slow down at regular speed, decrement block_timer by delta until it's 0 and change_state(CharacterState.IDLE)
+func block_state(delta):
+	velocity.x = move_toward(velocity.x, 0, 20)
+	
+	if block_timer > 0:
+		block_timer -= delta
+	else:
+		change_state(CharacterState.IDLE)
+
 func start_recovery(frames, animation):
+	if (state != CharacterState.PUNCH) and (state != CharacterState.KICK): return
 	change_state(CharacterState.RECOVERY)
 	
 	animation_player.play(animation)
@@ -479,3 +517,25 @@ func face_your_opponent():
 		print("My opponent's on the other side. Flipping!")
 		scale.x *= -1
 		facing_direction *= -1
+
+#Attack_Was_Blocked() -- Start recovery for recovery frames + onBlockFA * -1, call opponent's Block_Attack(), negate horizontal speed
+func attack_was_blocked(target):
+	velocity.x = 0
+	
+	if target.has_method("block_attack"):
+		match state:
+			CharacterState.PUNCH:
+				print("Target, " + str(target) + " has blocked my punch!")
+				target.block_attack(punch_data)
+				start_recovery((punch_data["recovery_frames"] + (-1 * punch_data["onBlock_FA"])), punch_data["recovery_animation"])
+			
+			CharacterState.KICK:
+				print("Target, " + str(target) + " has blocked my kick!")
+				target.block_attack(kick_data)
+				start_recovery((kick_data["recovery_frames"] + (-1 * kick_data["onBlock_FA"])), kick_data["recovery_animation"])
+
+#When we're the ones blocking an attack, set state to BLOCK, take negative x velocity of half of the attack's knockback, set block_timer to the given attack's blockstun frames
+func block_attack(attack_data):
+	change_state(CharacterState.BLOCK)
+	velocity.x = -1 * (facing_direction) * attack_data["ground_knockback_force"] / 2
+	block_timer = attack_data["blockstun_frames"] * FRAME
