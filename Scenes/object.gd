@@ -12,6 +12,12 @@ var stat_box : TextEdit
 @export var current_wearable: Wearable # WILL ERROR IF NO WEARABLE PRESENT
 
 func _ready():
+	#print(self.name)
+	if("randomPants" in self.name):
+		set_random_pants_wearable()
+	else:
+		set_random_shirt_wearable()
+	
 	get_child(0).modulate = current_wearable.get_color()
 	stat_box = get_child(2)
 	stat_box.visible = false
@@ -21,6 +27,22 @@ func _ready():
 
 func get_current_wearable() -> Wearable:
 	return current_wearable
+	
+func set_random_pants_wearable():
+	var rng = RandomNumberGenerator.new()
+	var path   =  "res://Assets/Resources/"
+	var pants = ["bluePants.tres","blueShorts.tres","purplePants.tres","whiteShorts.tres"]
+	var rand = rng.randi_range(0,pants.size()-1)
+	print(rand)
+	current_wearable = load(path + pants[rand])
+	
+func set_random_shirt_wearable():
+	var rng = RandomNumberGenerator.new()
+	var path   =  "res://Assets/Resources/"
+	var shirts = ["redShirt.tres","whiteShirt.tres","greenShirt.tres","blackShirt.tres"]
+	var rand = rng.randi_range(0,shirts.size()-1)
+	print(rand)
+	current_wearable = load(path + shirts[rand])
 	#
 #func _process(delta):
 	#if not started:

@@ -19,6 +19,12 @@ func _process(delta: float) -> void:
 
 func _on_timer_timeout() -> void:
 	var results = get_last_outfit();
+	print(results.size())
+	for key in results:
+		print(key.collider.get_parent().name)
+	#for r in range(0,results.size()-1):
+	#	shirt_text = results[r].collider.get_parent().current_wearable.get_outfit_name()
+	#	print(shirt_text)
 	
 	if results.size() == 2:
 		shirt_text = results[1].collider.get_parent().current_wearable.get_outfit_name()

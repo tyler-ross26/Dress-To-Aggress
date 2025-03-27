@@ -70,8 +70,13 @@ func _physics_process(delta: float):
 		animation_player.play("kick")
 	elif Input.is_action_pressed("Key_A"):
 		animation_player.play("walk")
-	elif Input.is_action_pressed("Space"):
+	elif Input.is_action_pressed("Key_D"):
 		animation_player.play("punch")
 	else:
 		animation_player.play("idle")
+		
+	if Input.is_action_pressed("Space"):
+		var tree: SceneTree = get_tree()
+		tree.change_scene_to_file("res://Scenes/DressUp.tscn") #replace with fighting scene
+
 	

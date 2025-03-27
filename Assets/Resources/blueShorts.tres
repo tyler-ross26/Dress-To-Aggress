@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Wearable" load_steps=13 format=3 uid="uid://c4w8betwkiqn6"]
+[gd_resource type="Resource" script_class="Wearable" load_steps=13 format=3 uid="uid://bcymsvxruxa7w"]
 
 [ext_resource type="Texture2D" uid="uid://d0xs70xxi4iyo" path="res://Assets/Sprites/Clothing Frames/shorts/Idle Frames/IdleShorts0.png" id="1_3wyrq"]
 [ext_resource type="Texture2D" uid="uid://1wdqy8qirfwq" path="res://Assets/Sprites/Clothing Frames/shorts/Idle Frames/IdleShorts1.png" id="2_dql5r"]
@@ -25,8 +25,8 @@ speedChange = 0.0
 name = "blueShorts"
 outfitSet = "Basic"
 outfitPattern = "Solid"
-description = "blue Shorts"
-color = Color(0.566673, 0.837368, 0.968357, 1)
+description = "blue Pants"
+color = Color(0.0700011, 0.286041, 0.3737, 1)
 mirrorPose = ExtResource("5_kng2a")
 idlePose0 = ExtResource("1_3wyrq")
 idlePose1 = ExtResource("2_dql5r")
