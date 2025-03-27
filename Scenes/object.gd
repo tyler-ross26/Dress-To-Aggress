@@ -99,7 +99,7 @@ func _on_area_2d_body_entered(body: StaticBody2D):
 	if (body.is_in_group('dropable') and platforms < 1):
 		platforms += 1
 		is_inside_dropable = true
-		body.modulate = Color(Color.REBECCA_PURPLE, 1)
+		body.modulate = Color(Color.REBECCA_PURPLE, 0.2)
 		body_ref = body
 		
 
@@ -107,5 +107,5 @@ func _on_area_2d_body_exited(body):
 	if body.is_in_group('dropable') and platforms == 1:
 		platforms -= 1
 		is_inside_dropable = false
-		body.modulate  = Color(Color.MEDIUM_PURPLE, 0.7)
+		body.modulate  = Color(Color.MEDIUM_PURPLE, 0.0)
 		

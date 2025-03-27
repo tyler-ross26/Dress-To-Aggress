@@ -1,1 +1,1 @@
-purplePants,redShirt,,
+whiteShorts,whiteShirt,,
