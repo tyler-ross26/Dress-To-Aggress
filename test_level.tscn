@@ -1,8 +1,7 @@
-[gd_scene load_steps=10 format=4 uid="uid://dtp5eywvmmy1j"]
+[gd_scene load_steps=8 format=4 uid="uid://dtp5eywvmmy1j"]
 
 [ext_resource type="Texture2D" uid="uid://hql0e531i2dd" path="res://Assets/Streets of Fight files/Streets of Fight files/Assets/Stage Layers/tileset.png" id="1_1c2mv"]
 [ext_resource type="PackedScene" uid="uid://chyj64wwnwo67" path="res://CharacterController.tscn" id="2_f7g2b"]
-[ext_resource type="Script" uid="uid://c4tm5bp6m4ur6" path="res://Scripts/hurtbox.gd" id="3_f7g2b"]
 [ext_resource type="Script" uid="uid://doprhsee3brm1" path="res://Scripts/player1.gd" id="3_sb12i"]
 [ext_resource type="Script" uid="uid://digd4vhe25hc3" path="res://Scripts/player2.gd" id="5_sb12i"]
 
@@ -552,9 +551,6 @@ sources/0 = SubResource("TileSetAtlasSource_4ptq8")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1c2mv"]
 size = Vector2(27, 256)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_4ptq8"]
-size = Vector2(5, 20)
-
 [node name="Test Level" type="Node2D"]
 
 [node name="TileMap" type="TileMap" parent="."]
@@ -605,15 +601,6 @@ position = Vector2(-241, 1)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Invisible Wall"]
 position = Vector2(149, -15)
 shape = SubResource("RectangleShape2D_1c2mv")
-
-[node name="EnemyTest" type="Area2D" parent="."]
-position = Vector2(39, 54)
-script = ExtResource("3_f7g2b")
-metadata/_custom_type_script = "uid://c4tm5bp6m4ur6"
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyTest"]
-position = Vector2(-0.5, 0)
-shape = SubResource("RectangleShape2D_4ptq8")
 
 [node name="Player2" parent="." instance=ExtResource("2_f7g2b")]
 position = Vector2(19, 15)

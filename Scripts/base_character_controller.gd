@@ -4,8 +4,24 @@ class_name BaseCharacterController
 @export var player_type  = 0  # 0 = CPU, 1 = Player 1, 2 = Player 2
 @export var enemy_name = "player1"  # Name of the enemy node
 
+var movement_speed_mult = 1
+var dash_speed_mult = 1
+var dash_available = true
+var jump_height_mult = 1
+var jump_speed_mult = 1
 
-# A surprise tool to help us later. Based on the player type, in a later function, these'll be redefined or left empty depending on who's controlling it. This list will be expanded with each control.
+var punch_speed_mult = 1
+var punch_hitstun_mult = 1
+var punch_knockback_mult = 1
+var punch_damage_mult = 1
+
+var kick_speed_mult = 1
+var kick_hitstun_mult = 1
+var kick_knockback_mult = 1
+var kick_forward_mult = 1
+var kick_damage_mult = 1
+
+# Based on the player type, in a later function, these'll be redefined or left empty depending on who's controlling it. This list will be expanded with each control.
 var left_input = ""
 var right_input = ""
 var jump_input = ""
@@ -264,7 +280,7 @@ func handle_input(delta):
 		
 		CharacterState.STARTUP:
 			#Noting this to remember later. Freezing the player's horizontal velocity during startup might be a problem. 
-			velocity.x = 0
+			if is_on_floor(): velocity.x = 0
 		
 		CharacterState.PUNCH:
 			animation_player.play(punch_data["active_animation"])
@@ -275,7 +291,7 @@ func handle_input(delta):
 			kick_state(delta)
 		
 		CharacterState.RECOVERY:
-			velocity.x = move_toward(velocity.x, 0, punch_deceleration)
+			if (is_on_floor()): velocity.x = move_toward(velocity.x, 0, punch_deceleration)
 			if cancellable: check_for_attack()
 			disable_hitboxes()
 		
@@ -348,6 +364,8 @@ func jump_state(direction, delta):
 	if not left_ground_check and not is_on_floor():
 		left_ground_check = true
 	
+	check_for_attack()
+	
 	if left_ground_check and is_on_floor():
 		change_state(CharacterState.IDLE)
 		print("Just landed!")
@@ -376,14 +394,15 @@ func start_punch():
 	if (state != CharacterState.STARTUP): return
 	
 	attack_timer = punch_data["active_frames"] * FRAME
-	velocity.x = punch_data["forward_force"] * facing_direction
+	velocity.x += punch_data["forward_force"] * facing_direction
+	print(velocity.x)
 	punch_hitbox.enable()
 	cancellable = true
 	
 	change_state(CharacterState.PUNCH)
 
 func punch_state(delta):
-	velocity.x = move_toward(velocity.x, 0, punch_deceleration)
+	if (is_on_floor()): velocity.x = move_toward(velocity.x, 0, punch_deceleration)
 	
 	if attack_timer > 0:
 		attack_timer -= delta
