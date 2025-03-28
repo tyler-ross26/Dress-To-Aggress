@@ -21,6 +21,14 @@ var kick_knockback_mult = 1
 var kick_forward_mult = 1
 var kick_damage_mult = 1
 
+var pose_speed_mult = 1
+var pose_hitstun_mult = 1
+var pose_knockback_mult = 1
+var pose_damage_mult = 1
+
+
+@export var health = 100
+
 # Based on the player type, in a later function, these'll be redefined or left empty depending on who's controlling it. This list will be expanded with each control.
 var left_input = ""
 var right_input = ""
@@ -31,7 +39,7 @@ var pose_input = ""
 var debug_hurt = ""
 
 #At the heart of the player controller, this is the ENUM that defines all the current states the player can be in. This will get longer as more states are added, and this should be the first place you go to add a new state.
-enum CharacterState { IDLE, WALK, JUMP, DASH, STARTUP, RECOVERY, PUNCH, KICK, HURT, BLOCK, POSE_STARTUP, POSE, DEAD}
+enum CharacterState { IDLE, WALK, JUMP, DASH, STARTUP, RECOVERY, PUNCH, KICK, HURT, BLOCK, POSE_STARTUP, POSE, DEAD, DISABLED}
 var state = CharacterState.IDLE
 var left_ground_check = false
 
@@ -70,76 +78,76 @@ var last_right_press_time = 0.0
 var last_dash_time = 0.0
 var dash_timer = 0.0
 
-@export var health = 100
-
 var cancellable = true
 
 var block_legal = false
 var block_timer = 0.0
 
 var dead = false
+var disabled = false
 
 @export var DOUBLE_TAP_TIME = 0.2 # Time window for double tap detection
 @export var DASH_TIME = 0.20 # Dash lasts 0.20 seconds, lengthen this for a longer dash.
-@export var DASH_SPEED = 90 # Set dash speed
+@export var DASH_SPEED = 90 * dash_speed_mult # Set dash speed
 @export var DASH_COOLDOWN = 0.2 # Half a second cooldown between valid dashes. This prevents the player from spamming dash across the screen, without stopping.
 @export var MIDAIR_DASH = true
 
 #Note for the below data: onBlock is positive because, if an attack is blocked, the player will transition to the RECOVERY state for (recovery + onBlock) frames. 
 var attack_timer = 0.0
 var punch_data = {
-	"startup_frames" : 6,
+	"startup_frames" : 6 / punch_speed_mult,
 	"active_frames" : 4,
-	"recovery_frames" : 11,
+	"recovery_frames" : 11 / punch_speed_mult,
 	"blockstun_frames" : 11,
 	"onBlock_FA" : -3,
-	"ground_hitstun": 20,
-	"air_hitstun" : 20,
-	"ground_knockback_force" : 100,
-	"air_knockback_force" : 50,
+	"ground_hitstun": 20 / punch_hitstun_mult,
+	"air_hitstun" : 20 / punch_hitstun_mult,
+	"ground_knockback_force" : 100 * punch_knockback_mult,
+	"air_knockback_force" : 50 * punch_knockback_mult,
 	"forward_force": 0,
-	"damage": 10,
+	"damage": 10 * punch_damage_mult,
 	"startup_animation" : "jump startup",
 	"active_animation" : "punch",
 	"recovery_animation" : "punch recovery",
 }
 var punch_deceleration = 10
 
+
 var kick_data = {
-	"startup_frames" : 14,
+	"startup_frames" : 14 / kick_speed_mult,
 	"active_frames" : 6,
-	"recovery_frames" : 18,
+	"recovery_frames" : 18 / kick_speed_mult,
 	"blockstun_frames" : 15,
 	"onBlock_FA" : -8,
-	"ground_hitstun": 22,
-	"air_hitstun" : 22,
-	"ground_knockback_force" : 200,
-	"air_knockback_force" : 100,
-	"forward_force": 100,
-	"damage": 30,
+	"ground_hitstun": 22 * kick_hitstun_mult,
+	"air_hitstun" : 22 * kick_hitstun_mult,
+	"ground_knockback_force" : 200 * kick_knockback_mult,
+	"air_knockback_force" : 100 * kick_knockback_mult,
+	"forward_force": 100 * kick_forward_mult,
+	"damage": 30 * kick_damage_mult,
 	"startup_animation" : "jump startup",
 	"active_animation" : "kick",
 	"recovery_animation" : "kick recovery",
 }
 
 var throw_data = {
-	"startup_frames" : 5,
+	"startup_frames" : 5 / pose_speed_mult,
 	"active_frames" : 3,
-	"recovery_frames" : 23,
+	"recovery_frames" : 23 / pose_speed_mult,
 	"pose_frames" : 60,
-	"ground_hitstun": 77, # This value needs to be pose_frames + 17, so that the attacker has 17 frames of frame advantage for posing first.
-	"ground_knockback_force" : 200,
+	"ground_hitstun": 77 * pose_hitstun_mult, # This value needs to be pose_frames + 17, so that the attacker has 17 frames of frame advantage for posing first.
+	"ground_knockback_force" : 200 * pose_knockback_mult,
 	"forward_force": 0,
-	"damage": 20,
+	"damage": 20 * pose_damage_mult,
 	"startup_animation" : "jump startup",
 	"active_animation" : "pose",
 	"recovery_animation" : "pose recovery",
 }
 
 #Defines the player's walk speed, and jump speeds.
-@export var SPEED = 20.0
-@export var VERTICAL_JUMP_VELOCITY = -250.0
-@export var HORIZONTAL_JUMP_VELOCITY = 50
+@export var SPEED = 20.0 * movement_speed_mult
+@export var VERTICAL_JUMP_VELOCITY = -250.0 * jump_height_mult
+@export var HORIZONTAL_JUMP_VELOCITY = 50 * jump_speed_mult
 
 
 func set_controls():
@@ -179,26 +187,10 @@ func apply_gravity(delta):
 		#We multiply gravity times 0.8 to make it slightly slower, so mess with this in tandem with the vertical jump velocity to change the player's jumping speed.
 		velocity += (get_gravity() * 0.8) * delta
 
-func check_for_dash():
-	if state == CharacterState.IDLE or state == CharacterState.WALK or state == CharacterState.JUMP:
-		if Input.is_action_just_pressed(left_input):
-			if current_time - last_left_press_time <= DOUBLE_TAP_TIME:
-				if dashes_left == 1 and (current_time - last_dash_time >= DASH_COOLDOWN): #check that dash is off cooldown
-					if (not is_on_floor() and MIDAIR_DASH) or (is_on_floor()):
-						start_dash(-1)
-				dash_direction = -1
-			last_left_press_time = current_time
-		
-		if Input.is_action_just_pressed(right_input):
-			if current_time - last_right_press_time <= DOUBLE_TAP_TIME:
-				if dashes_left == 1 and (current_time - last_dash_time >= DASH_COOLDOWN):
-					if (not is_on_floor() and MIDAIR_DASH) or (is_on_floor()):
-						start_dash(1)
-				dash_direction = 1
-			last_right_press_time = current_time
-
 func _physics_process(delta: float) -> void:
 	apply_gravity(delta)
+	
+	current_time = Time.get_ticks_msec() / 1000.0  # Time in seconds
 	
 	if dead: 
 		animation_player.play("dead")
@@ -223,24 +215,29 @@ func handle_input(delta):
 	#Keeping this in the code instead of deleting it! This is great for debug. Enable it, and edit the print function, and receive whatever information you need relative to player1's character controller.
 	#if (player_type == 1): print(state)
 	
-	if Input.is_action_pressed(debug_hurt):
-		get_hit_with(punch_data)
+	if (not disabled) and Input.is_action_pressed(debug_hurt):
+		#print("Disabling myself!")
+		#disable_control()
+		#get_hit_with(punch_data)
+		pass
 	
-	current_time = Time.get_ticks_msec() / 1000.0  # Time in seconds
-	
-	if Input.is_action_just_pressed(left_input):
-		direction = -1
-	elif Input.is_action_just_pressed(right_input):
-		direction = 1
-	elif (state != CharacterState.DASH) and (direction == 1 and not Input.is_action_pressed(right_input)) or (direction == -1 and not Input.is_action_pressed(left_input)):
-		direction = 0
+	if not disabled:
+		if Input.is_action_just_pressed(left_input):
+			direction = -1
+		elif Input.is_action_just_pressed(right_input):
+			direction = 1
+		elif (state != CharacterState.DASH) and (direction == 1 and not Input.is_action_pressed(right_input)) or (direction == -1 and not Input.is_action_pressed(left_input)):
+			direction = 0
 	
 	#This handles checking for the dash input, completely outside of the defined states below.
 	check_for_dash()
 	
+	handle_states(direction, delta)
+
+func handle_states(direction, delta):
 	if direction == 0: block_legal = false
 	
-	#To add a new state, just add a new match case for that specific state, and similarly include the animation to be played and a call for that state's function. 
+		#To add a new state, just add a new match case for that specific state, and similarly include the animation to be played and a call for that state's function. 
 	match state:
 		
 		CharacterState.IDLE:
@@ -320,15 +317,16 @@ func handle_input(delta):
 	move_and_slide()
 
 #Every function below handles the actual logic for each state -- idle_state is called during the idle state, walk_state during the walk state, and so forth. As you could guess, each of those functions then define what can actually be done, and what inputs or conditions transfer us from state to state. 
-func idle_state(direction):	
+func idle_state(direction):
 	if is_on_floor():
 		dashes_left = 1
 		
 		if direction: 
 			change_state(CharacterState.WALK)
 		else:
-			if Input.is_action_pressed(jump_input):
-				start_action(4, func(): start_jump(0), "jump startup")
+			
+			if not disabled:
+				check_for_jump()
 			
 			check_for_attack()
 			check_for_pose()
@@ -411,15 +409,13 @@ func punch_state(delta):
 
 #This is where the code goes for the moment the punch is active. LATER ON, add the sound effect in this function.
 func start_kick():
-	if (state != CharacterState.STARTUP): 
-		print("You're not in startup phase!")
-		print(state == CharacterState.STARTUP)
-	
-	attack_timer = kick_data["active_frames"] * FRAME
-	velocity.x = kick_data["forward_force"] * facing_direction
-	kick_hitbox.enable()
-	
-	change_state(CharacterState.KICK)
+	print(CharacterState.keys()[state])
+	if (state == CharacterState.STARTUP): 
+		attack_timer = kick_data["active_frames"] * FRAME
+		velocity.x = kick_data["forward_force"] * facing_direction
+		kick_hitbox.enable()
+		
+		change_state(CharacterState.KICK)
 
 func kick_state(delta):
 	velocity.x = move_toward(velocity.x, 0, punch_deceleration)
@@ -446,7 +442,7 @@ func start_recovery(frames, animation):
 	animation_player.play(animation)
 	var wait_time = frames * FRAME
 	var timer = get_tree().create_timer(wait_time)
-	timer.timeout.connect(func(): change_state(CharacterState.IDLE))
+	timer.timeout.connect(func(): if state != CharacterState.STARTUP: change_state(CharacterState.IDLE))
 
 func get_hit_with(attack_data):
 	change_state(CharacterState.HURT)
@@ -479,6 +475,8 @@ func start_action(frames, continuation, animation):
 	change_state(CharacterState.STARTUP)
 	
 	animation_player.play(animation)
+	
+	print(frames)
 	
 	var wait_time = frames * FRAME
 	var timer = get_tree().create_timer(wait_time)
@@ -526,18 +524,56 @@ func change_state(new_state):
 	print(str(player_type) + ": Character State Updated: " + CharacterState.keys()[state])
 
 func check_for_attack():
+	if disabled == true: 
+		return
+	
+	
 	if Input.is_action_pressed(punch_input):
 		stop_all_timers()
-		start_action(punch_data["startup_frames"], func(): start_punch(), punch_data["startup_animation"])
+		start_action(punch_data["startup_frames"], func(): 
+			if state == CharacterState.STARTUP:
+				start_punch()
+			, punch_data["startup_animation"])
 	
 	if Input.is_action_pressed(kick_input):
 		stop_all_timers()
-		start_action(kick_data["startup_frames"], func(): start_kick(), kick_data["startup_animation"])
+		start_action(kick_data["startup_frames"], func(): 
+			if state == CharacterState.STARTUP:
+				start_kick()
+			, kick_data["startup_animation"])
 
 func check_for_pose():
+	if disabled: return
+	
 	if Input.is_action_pressed(pose_input):
 		stop_all_timers()
 		start_pose()
+
+func check_for_dash():
+	
+	if (dash_available == false): return
+	if disabled: return
+	
+	if state == CharacterState.IDLE or state == CharacterState.WALK or state == CharacterState.JUMP:
+		if Input.is_action_just_pressed(left_input):
+			if current_time - last_left_press_time <= DOUBLE_TAP_TIME:
+				if dashes_left == 1 and (current_time - last_dash_time >= DASH_COOLDOWN): #check that dash is off cooldown
+					if (not is_on_floor() and MIDAIR_DASH) or (is_on_floor()):
+						start_dash(-1)
+				dash_direction = -1
+			last_left_press_time = current_time
+		
+		if Input.is_action_just_pressed(right_input):
+			if current_time - last_right_press_time <= DOUBLE_TAP_TIME:
+				if dashes_left == 1 and (current_time - last_dash_time >= DASH_COOLDOWN):
+					if (not is_on_floor() and MIDAIR_DASH) or (is_on_floor()):
+						start_dash(1)
+				dash_direction = 1
+			last_right_press_time = current_time
+
+func check_for_jump():
+	if Input.is_action_pressed(jump_input):
+		start_action(4, func(): start_jump(0), "jump startup")
 
 func attack_hit(target):
 	print("I'm jaking it")
@@ -626,3 +662,18 @@ func block_attack(attack_data):
 func update_healthbar():
 	#This is where we'd call on the UI to update the reduced health -- IF I HAD ONE!!
 	print(str(player_type) + ": Health: " + str(health))
+
+func disable_control():
+	disabled = true
+	
+	left_input = ""
+	right_input = ""
+	jump_input = ""
+	punch_input = ""
+	kick_input = ""
+	pose_input = ""
+	debug_hurt = ""
+
+func enable_control():
+	disabled = false
+	set_controls()
