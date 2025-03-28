@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://chyj64wwnwo67"]
+[gd_scene load_steps=30 format=3 uid="uid://chyj64wwnwo67"]
 
 [ext_resource type="Texture2D" uid="uid://bkv1eebpqokq1" path="res://Assets/Player Sprites/dashb1.png" id="1_n7ghd"]
 [ext_resource type="Script" uid="uid://cmdthl362buy2" path="res://Scripts/base_character_controller.gd" id="1_q13i1"]
@@ -9,7 +9,6 @@
 [ext_resource type="Texture2D" uid="uid://b0r5j23yyt04d" path="res://Assets/Player Sprites/Idle.png" id="5_bwjto"]
 [ext_resource type="Texture2D" uid="uid://c16sjklffnr7h" path="res://Assets/Player Sprites/Idle2.png" id="6_606se"]
 [ext_resource type="Texture2D" uid="uid://cagujdubdoy5q" path="res://Assets/Player Sprites/hurt.png" id="6_q13i1"]
-[ext_resource type="Texture2D" uid="uid://dkcxbf147dtnv" path="res://Assets/Player Sprites/dead.png" id="7_7slhi"]
 [ext_resource type="Texture2D" uid="uid://cjpdoeaduc5kj" path="res://Assets/Player Sprites/walkb1.png" id="7_u1c27"]
 [ext_resource type="Texture2D" uid="uid://b6jkfhqjd1vjq" path="res://Assets/Player Sprites/jump.png" id="8_ivps1"]
 [ext_resource type="Texture2D" uid="uid://dvoo30d0ryex8" path="res://Assets/Player Sprites/walkb2.png" id="8_op7ga"]
@@ -24,7 +23,6 @@
 [ext_resource type="Texture2D" uid="uid://87nsyv7sulrk" path="res://Assets/Player Sprites/throw recovery.png" id="15_lcnf3"]
 [ext_resource type="Script" uid="uid://c4tm5bp6m4ur6" path="res://Scripts/hurtbox.gd" id="16_u1c27"]
 [ext_resource type="Script" uid="uid://c2vqkmhy0bijw" path="res://Scripts/hitbox.gd" id="17_op7ga"]
-[ext_resource type="Script" uid="uid://cpwnjci14lgit" path="res://Scripts/throw_hitbox.gd" id="24_lcnf3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5tmop"]
 size = Vector2(10, 20)
@@ -59,14 +57,6 @@ animations = [{
 }],
 "loop": true,
 "name": &"dash right",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("7_7slhi")
-}],
-"loop": true,
-"name": &"dead",
 "speed": 5.0
 }, {
 "frames": [{
@@ -189,9 +179,18 @@ size = Vector2(9, 20)
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_q13i1")
+player_type = null
+enemy_name = null
+DOUBLE_TAP_TIME = null
+DASH_TIME = null
+DASH_SPEED = null
+DASH_COOLDOWN = null
+MIDAIR_DASH = null
+SPEED = null
+VERTICAL_JUMP_VELOCITY = null
+HORIZONTAL_JUMP_VELOCITY = null
 
 [node name="Line2D" type="Line2D" parent="."]
-visible = false
 position = Vector2(0.207869, 0)
 scale = Vector2(1.16696, 1)
 points = PackedVector2Array(0, 0, 20, 0)
@@ -203,7 +202,8 @@ shape = SubResource("RectangleShape2D_5tmop")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_pbfsw")
-animation = &"dead"
+animation = &"idle"
+frame_progress = 0.605925
 
 [node name="Hurtbox" type="Area2D" parent="."]
 script = ExtResource("16_u1c27")
@@ -234,7 +234,7 @@ shape = SubResource("RectangleShape2D_yu3r3")
 debug_color = Color(0.786632, 0.431925, 0, 0.42)
 
 [node name="Throw Hitbox" type="Area2D" parent="."]
-script = ExtResource("24_lcnf3")
+script = ExtResource("17_op7ga")
 metadata/_custom_type_script = "uid://c2vqkmhy0bijw"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Throw Hitbox"]
