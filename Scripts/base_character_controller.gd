@@ -117,7 +117,7 @@ var punch_deceleration = 10
 var kick_data = {
 	"startup_frames" : 14 / kick_speed_mult,
 	"active_frames" : 6,
-	"recovery_frames" : 18 / kick_speed_mult,
+	"recovery_frames" : 20 / kick_speed_mult,
 	"blockstun_frames" : 12,
 	"onBlock_FA" : -12,
 	"ground_hitstun": 22 * kick_hitstun_mult,
@@ -148,7 +148,7 @@ var throw_data = {
 #Defines the player's walk speed, and jump speeds.
 @export var SPEED = 20.0 * movement_speed_mult
 @export var VERTICAL_JUMP_VELOCITY = -250.0 * jump_height_mult
-@export var HORIZONTAL_JUMP_VELOCITY = 50 * jump_speed_mult
+@export var HORIZONTAL_JUMP_VELOCITY = 70 * jump_speed_mult
 
 
 func set_controls():

@@ -122,7 +122,7 @@ func walk_closer():
 		pressing_left = true
 
 func walk_away():
-	block_legal = true
+	if state != CharacterState.RECOVERY: block_legal = true
 	
 	if facing_direction == 1:
 		pressing_left = true
@@ -185,7 +185,7 @@ func punch():
 
 func kick():
 	kick_pressed = true
-	await get_tree().create_timer(0.2).timeout
+	await get_tree().create_timer(0.3).timeout
 	kick_pressed = false
 
 func jump():
