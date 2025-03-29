@@ -42,18 +42,18 @@ func handle_input(delta):
 	if Input.is_action_pressed("DEBUG_hurt_player"):
 		dash_towards()
 	
-	#if horizontal_distance > pose_range:
-		#walk_closer()
-	#elif horizontal_distance < pose_range:
-		#walk_away()
-	#else:
-		#release_inputs()
+	if horizontal_distance > kick_range + 2:
+		walk_closer()
+	elif horizontal_distance < kick_range - 2:
+		walk_away()
+	else:
+		release_inputs()
 	
-	if enemy_state == CharacterState.JUMP and horizontal_distance <= kick_range and vertical_distance < 30:
+	if enemy_state == CharacterState.JUMP and horizontal_distance < kick_range - 2 and vertical_distance < 30:
 		kick()
 	
-	#if horizontal_distance <= pose_range:
-	#	if is_on_floor(): use_pose()
+	if horizontal_distance <= pose_range:
+		if is_on_floor(): use_pose()
 	
 	if (Input.is_action_just_pressed(enemy.punch_input) and horizontal_distance <= punch_range):
 		block(punch_time)
