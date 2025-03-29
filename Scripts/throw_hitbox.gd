@@ -16,5 +16,4 @@ func on_area_entered(hurtbox: Hurtbox) -> void:
 		hurtbox_parent.pose_broken()
 	elif (hurtbox_parent.has_method("is_on_floor") and hurtbox_parent.is_on_floor()):
 		print("Posing! 28")
-		print(hurtbox_parent.CharacterState.keys()[hurtbox_parent.state])
 		hitbox_parent.pose(hurtbox_parent)

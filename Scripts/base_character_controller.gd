@@ -276,23 +276,28 @@ func handle_states(direction, delta):
 			dash_state(delta)
 		
 		CharacterState.STARTUP:
+			block_legal = false
 			#Noting this to remember later. Freezing the player's horizontal velocity during startup might be a problem. 
 			if is_on_floor(): velocity.x = 0
 		
 		CharacterState.PUNCH:
+			block_legal = false
 			animation_player.play(punch_data["active_animation"])
 			punch_state(delta)
 		
 		CharacterState.KICK:
+			block_legal = false
 			animation_player.play(kick_data["active_animation"])
 			kick_state(delta)
 		
 		CharacterState.RECOVERY:
+			block_legal = false
 			if (is_on_floor()): velocity.x = move_toward(velocity.x, 0, punch_deceleration)
 			if cancellable: check_for_attack()
 			disable_hitboxes()
 		
 		CharacterState.HURT:
+			block_legal = false
 			disable_hitboxes()
 			if is_on_floor():
 				velocity.x = move_toward(velocity.x, 0, 25)
@@ -393,7 +398,6 @@ func start_punch():
 	
 	attack_timer = punch_data["active_frames"] * FRAME
 	velocity.x += punch_data["forward_force"] * facing_direction
-	print(velocity.x)
 	punch_hitbox.enable()
 	cancellable = true
 	
@@ -409,11 +413,12 @@ func punch_state(delta):
 
 #This is where the code goes for the moment the punch is active. LATER ON, add the sound effect in this function.
 func start_kick():
-	print(CharacterState.keys()[state])
 	if (state == CharacterState.STARTUP): 
 		attack_timer = kick_data["active_frames"] * FRAME
 		velocity.x = kick_data["forward_force"] * facing_direction
 		kick_hitbox.enable()
+		
+		cancellable = false
 		
 		change_state(CharacterState.KICK)
 
@@ -442,7 +447,7 @@ func start_recovery(frames, animation):
 	animation_player.play(animation)
 	var wait_time = frames * FRAME
 	var timer = get_tree().create_timer(wait_time)
-	timer.timeout.connect(func(): if state != CharacterState.STARTUP: change_state(CharacterState.IDLE))
+	timer.timeout.connect(func(): if state != CharacterState.STARTUP and state != CharacterState.HURT: change_state(CharacterState.IDLE))
 
 func get_hit_with(attack_data):
 	change_state(CharacterState.HURT)
@@ -476,8 +481,6 @@ func start_action(frames, continuation, animation):
 	
 	animation_player.play(animation)
 	
-	print(frames)
-	
 	var wait_time = frames * FRAME
 	var timer = get_tree().create_timer(wait_time)
 	#print("Creating a timer for " + str(wait_time))
@@ -509,7 +512,6 @@ func pose_broken():
 	change_state(CharacterState.POSE)
 	
 	velocity.x = -1 * (facing_direction) * 100
-	print(velocity.x)
 	
 	start_recovery((throw_data["recovery_frames"] / 2.0), throw_data["active_animation"])
 
@@ -576,8 +578,6 @@ func check_for_jump():
 		start_action(4, func(): start_jump(0), "jump startup")
 
 func attack_hit(target):
-	print("I'm jaking it")
-	print(target)
 	
 	if target.has_method("get_hit_with"):
 		match state:
