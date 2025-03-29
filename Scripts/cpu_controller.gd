@@ -1,5 +1,6 @@
 extends BaseCharacterController
 
+#These are all booleans that are used to override functions way below and replace the original Input. checks. Basically, we're giving the CPU buttons! :D
 var pressing_left = false
 var pressing_right = false
 var pressing_jump = false
@@ -7,20 +8,34 @@ var punch_pressed = false
 var kick_pressed = false
 var pose_pressed = false
 
-enum Enemy_Range { POSE, PUNCH, KICK, FAR}
-var range = Enemy_Range.POSE
+#enum Enemy_Range { POSE, PUNCH, KICK, FAR}
+#var range = Enemy_Range.POSE
+
+#From here, we're defining the CPU's "eyes", like what the current state is, what their last state was, if they're attacking, what their last attack was, etc etc
 var enemy_state = CharacterState.IDLE
-var attacking = true
+var last_enemy_state = CharacterState.IDLE
+
+#These two, in particular, are useful for checking before blocking
+var enemy_attacking = true
 var current_enemy_attack = CharacterState.IDLE
+
+#These are useful for checking when we can punish. If the player's just attacked, and they're in attack range, and they're in recovery, then kick, for example.
+var enemy_just_attacked = false
+var last_enemy_attack = CharacterState.IDLE 
+
+#Could be useful for checking if the enemy's blocking to break their block by POSE
 var enemy_blocking = false
 
+#This one defines the enemy CPU's "eyes" for knowing if the player's approaching, retreating, or standing in place. 1 for approaching (getting closer), -1 for retreating, 0 for idle.
+var enemy_approaching
+
+#Rather than an enum, THIS is what you check horizontal distance against to react based on the player's distance. If their horizontal distance is less than kick range, they're in kick range, for example. 
 var pose_range = 11
 var punch_range = 18
 var kick_range = 32
 
-var kick_time = 0.35
+var kick_time = 0.30
 var punch_time = 0.15
-
 
 func release_inputs():
 	pressing_left = false
@@ -30,36 +45,19 @@ func release_inputs():
 	kick_pressed = false
 	pose_pressed = false
 
+#WARNING!!!!!!! If you get weird errors, >WARNING< MAKE SURE THAT THE ENEMY NAME IS EXACT TO THE NODE IN THE LEVEL >WARNING<. Check this in case of any weird null errors.
 func _ready():
 	player_type = 0
 	enemy_name = "Player"
 	super._ready()
 
+#Overloads the player's handle_input for the CPU. by checking the booleans and calling other necessary functions to set its eyes.
 func handle_input(delta):
 	horizontal_distance = abs(position.x - enemy.position.x)
 	vertical_distance = enemy.global_position.y - global_position.y
 	
 	if Input.is_action_pressed("DEBUG_hurt_player"):
 		dash_towards()
-	
-	if horizontal_distance > kick_range + 2:
-		walk_closer()
-	elif horizontal_distance < kick_range - 2:
-		walk_away()
-	else:
-		release_inputs()
-	
-	if enemy_state == CharacterState.JUMP and horizontal_distance < kick_range - 2 and vertical_distance < 30:
-		kick()
-	
-	if horizontal_distance <= pose_range:
-		if is_on_floor(): use_pose()
-	
-	if (Input.is_action_just_pressed(enemy.punch_input) and horizontal_distance <= punch_range):
-		block(punch_time)
-	
-	elif (Input.is_action_just_pressed(enemy.kick_input) and horizontal_distance <= kick_range):
-		block(kick_time) 
 	
 	if not disabled:
 		if pressing_left:
@@ -70,11 +68,48 @@ func handle_input(delta):
 			direction = 0
 			block_legal = false
 	
-	find_range()
+	#find_range()
 	find_state()
+	find_aggression()
 	check_enemy_attack()
 	handle_states(direction, delta)
+	
+	#this is where the fun begins
+	run_ai()
 
+#The fun. This is where our AI code can go, and, to whomever's working on the AI code, work your magic here. All of the code below can be edited and extended to however deep you want, based on the given eyes.
+func run_ai():
+	
+	#Example on how to make the CPU approach to a range. The + and - 2 are necessary because, if it's exact, it starts jittering back and forth. Give it a little leeway.
+	if horizontal_distance > kick_range + 2:
+		walk_closer()
+	elif horizontal_distance < kick_range - 2:
+		walk_away()
+	else:
+		release_inputs()
+	
+	#Example on how to make the CPU anti air. This and the below functions are reactionary, so you might want to link them to a random number to make it only have a CHANCE at reacting and defending. Higher chance == harder CPU.
+	if enemy_state == CharacterState.JUMP: 
+		if vertical_distance < 30:
+			if horizontal_distance < kick_range + 3 and horizontal_distance >= kick_range and enemy_approaching == 1:
+				kick()
+	
+	#Example on how to make the CPU pose at pose range.
+	if horizontal_distance <= pose_range:
+		if is_on_floor(): use_pose()
+	
+	#Example on how to make it block. The "***_time" variables tell the CPU to hold block for that long to properly block the attack. Make this chance based, or we'll have a perfect CPU that blocks every attack.
+	if (Input.is_action_just_pressed(enemy.punch_input) and horizontal_distance <= punch_range):
+		block(punch_time)
+	
+	elif (Input.is_action_just_pressed(enemy.kick_input) and horizontal_distance <= kick_range):
+		block(kick_time) 
+	
+	#Example on punishing after blocking a kick. This can be easily copied to make it punish punches.
+	if (enemy_just_attacked and enemy.state == CharacterState.RECOVERY and horizontal_distance <= kick_range):
+		kick()
+
+#This set of functions define the CPU's movement relative to the player. A little bit of underlying logic here, might not need to mess with it. Hopefully. Maybe.
 func walk_closer():
 	
 	block_legal = false
@@ -136,36 +171,7 @@ func dash_towards():
 				start_dash(facing_direction)
 		dash_direction = facing_direction
 
-func find_range():
-	if horizontal_distance <= pose_range:
-		set_range(Enemy_Range.POSE)
-	elif horizontal_distance <= punch_range:
-		set_range(Enemy_Range.PUNCH)
-	elif horizontal_distance <= kick_range:
-		set_range(Enemy_Range.KICK)
-	else:
-		set_range(Enemy_Range.FAR)
-
-func find_state():
-	if "state" in enemy:
-		enemy_state = enemy.state
-
-func set_range(new_range):
-	if dead: return
-	
-	range = new_range
-	#print(str(player_type) + ": Enemy Range Updated: " + Enemy_Range.keys()[range])
-
-func check_enemy_attack():
-	if enemy_state == CharacterState.PUNCH or enemy_state == CharacterState.KICK or enemy_state == CharacterState.POSE:
-		attacking = true
-		current_enemy_attack = enemy_state
-		if horizontal_distance <= kick_range: 
-			pass
-	else:
-		attacking = false
-		current_enemy_attack = null
-
+#These functions make the CPU "press buttons". It makes the corresponding boolean true for an instant, and then makes it false, similarly to how a player presses and releases a button. 
 func block(time):
 	walk_away()
 	await get_tree().create_timer(time).timeout
@@ -193,7 +199,53 @@ func use_pose():
 	pose_pressed = false
 
 
-#Everything from here down is functions from the parent class, overridden so that the CPU controller isn't checking for player inputs.
+
+#func find_range():
+	#if horizontal_distance <= pose_range:
+		#set_range(Enemy_Range.POSE)
+	#elif horizontal_distance <= punch_range:
+		#set_range(Enemy_Range.PUNCH)
+	#elif horizontal_distance <= kick_range:
+		#set_range(Enemy_Range.KICK)
+	#else:
+		#set_range(Enemy_Range.FAR)
+
+#I CAN SEE THE UNIVERSE
+#Defines the logic for the CPU's eye variables, and reading that data of what the player's doing.
+func find_state():
+	if "state" in enemy:
+		enemy_state = enemy.state
+		last_enemy_state = enemy.last_state
+
+func find_aggression():
+	if (enemy.direction == enemy.facing_direction * -1):
+		enemy_approaching = -1
+	elif enemy.direction == enemy.facing_direction:
+		enemy_approaching = 1
+	elif enemy_state == CharacterState.IDLE:
+		enemy_approaching = 0
+
+#func set_range(new_range):
+	#if dead: return
+	#
+	#range = new_range
+	##print(str(player_type) + ": Enemy Range Updated: " + Enemy_Range.keys()[range])
+
+func check_enemy_attack():
+	if enemy_state == CharacterState.PUNCH or enemy_state == CharacterState.KICK or enemy_state == CharacterState.POSE:
+		enemy_attacking = true
+		current_enemy_attack = enemy_state
+	elif last_enemy_state == CharacterState.PUNCH or last_enemy_state == CharacterState.KICK or last_enemy_state == CharacterState.POSE:
+		enemy_just_attacked = true
+		last_enemy_attack = last_enemy_state
+	else:
+		enemy_attacking = false
+		current_enemy_attack = null
+		
+		enemy_just_attacked = false
+		last_enemy_attack = null
+
+#Everything from here down is functions from the parent class, overridden so that the CPU controller isn't checking for player inputs. Don't peek behind the curtain -- the void stares back.
 func walk_state(direction):
 	if direction == 0:
 		change_state(CharacterState.IDLE)

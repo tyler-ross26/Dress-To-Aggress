@@ -41,6 +41,7 @@ var debug_hurt = ""
 #At the heart of the player controller, this is the ENUM that defines all the current states the player can be in. This will get longer as more states are added, and this should be the first place you go to add a new state.
 enum CharacterState { IDLE, WALK, JUMP, DASH, STARTUP, RECOVERY, PUNCH, KICK, HURT, BLOCK, POSE_STARTUP, POSE, DEAD, DISABLED}
 var state = CharacterState.IDLE
+var last_state = CharacterState.IDLE
 var left_ground_check = false
 
 @onready
@@ -117,8 +118,8 @@ var kick_data = {
 	"startup_frames" : 14 / kick_speed_mult,
 	"active_frames" : 6,
 	"recovery_frames" : 18 / kick_speed_mult,
-	"blockstun_frames" : 15,
-	"onBlock_FA" : -8,
+	"blockstun_frames" : 12,
+	"onBlock_FA" : -12,
 	"ground_hitstun": 22 * kick_hitstun_mult,
 	"air_hitstun" : 22 * kick_hitstun_mult,
 	"ground_knockback_force" : 200 * kick_knockback_mult,
@@ -521,7 +522,7 @@ func pose_state(delta):
 #Mostly for debug. Updates the character state and prints it to the console. 
 func change_state(new_state):
 	if dead: return
-	
+	last_state = state
 	state = new_state
 	print(str(player_type) + ": Character State Updated: " + CharacterState.keys()[state])
 
@@ -626,10 +627,10 @@ func face_your_opponent():
 	horizontal_distance = abs(enemy.global_position.x - global_position.x)
 	vertical_distance = enemy.global_position.y - global_position.y
 	
-	if (horizontal_distance < 8) and (vertical_distance > 19) and is_on_floor():
+	if (horizontal_distance < 9) and (vertical_distance > 19) and is_on_floor():
 		print("I'm standing on top of him.") 
 		velocity.y = -30
-		velocity.x = facing_direction * -1 * 50
+		velocity.x = facing_direction * -1 * 70
 	if (horizontal_distance < 0.5) and (vertical_distance > 19) and is_on_floor():
 		print("RANDOM BULLSHIT GO")
 	elif enemy_direction != 0 and enemy_direction != facing_direction and not (horizontal_distance < 0.5):
@@ -651,6 +652,7 @@ func attack_was_blocked(target):
 			CharacterState.KICK:
 				print("Target, " + str(target) + " has blocked my kick!")
 				target.block_attack(kick_data)
+				print((kick_data["recovery_frames"] + (-1 * kick_data["onBlock_FA"])))
 				start_recovery((kick_data["recovery_frames"] + (-1 * kick_data["onBlock_FA"])), kick_data["recovery_animation"])
 
 #When we're the ones blocking an attack, set state to BLOCK, take negative x velocity of half of the attack's knockback, set block_timer to the given attack's blockstun frames
