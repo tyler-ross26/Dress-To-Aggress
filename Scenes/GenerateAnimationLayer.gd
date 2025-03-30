@@ -12,26 +12,27 @@ func  _ready() -> void:
 
 	animation_player = self
 	
+	#get the clothing items to generate from the save file
 	var textFile = "res://Assets/OutfitSaveFile.txt"
 	var file  = FileAccess.open(textFile, FileAccess.READ)
 	var shirt_text =  file.get_as_text().get_slice(",",1)
 	var pants_text =  file.get_as_text().get_slice(",",0)
-
-
-	print(pants_text+","+shirt_text)
 	
+	#load pants
 	if self.name == "PantsLayer":
 		self.current_wearable = load("res://Assets/Resources/"+pants_text+".tres")
 		
-	
+	#load shirt
 	if self.name == "ShirtLayer":
 		self.current_wearable = load("res://Assets/Resources/"+shirt_text+".tres")
 	
+	#set postion to the body (might have   to adjust when merges wit htomies movement)
 	self.position  = $"../Body".position
-	self.scale = Vector2(3.0,3.0)
+	self.scale = Vector2(3.0,3.0)  #can  be chaanged
 	self.modulate = current_wearable.color
 	 
 	
+	#create the animations on this layer for each animation (might change or add more  when adapting to tommies)
 	animation_player.sprite_frames = SpriteFrames.new()
 	createAnimation("idle")
 	createAnimation("walk")
@@ -41,6 +42,7 @@ func  _ready() -> void:
 
 func createAnimation(anim_name: String):
 	
+	#set each animation with the frames from the wearable object that was loaded
 	animation_player.sprite_frames.add_animation(anim_name)
 	if(anim_name == "idle"):
 		animation_player.sprite_frames.add_frame(anim_name, current_wearable.get_idle_pose0(), 1.0)
@@ -64,7 +66,7 @@ func createAnimation(anim_name: String):
 	
 	
 
-
+#this is temporary,  changne it to adapt tot Tommies controls 
 func _physics_process(delta: float):
 	if Input.is_action_pressed("Key_S"):
 		animation_player.play("kick")
@@ -75,6 +77,7 @@ func _physics_process(delta: float):
 	else:
 		animation_player.play("idle")
 		
+	#goes back to the dress up scene
 	if Input.is_action_pressed("Space"):
 		var tree: SceneTree = get_tree()
 		tree.change_scene_to_file("res://Scenes/DressUp.tscn") #replace with fighting scene
