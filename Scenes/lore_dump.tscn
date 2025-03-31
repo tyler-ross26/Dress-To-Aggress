@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3 uid="uid://plc7pea74sny"]
+
+[ext_resource type="Texture2D" uid="uid://xslp5k44t814" path="res://Assets/Sprites/dress-up-room.jpg" id="1_yjdjk"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_yjdjk"]
+texture = ExtResource("1_yjdjk")
+
+[node name="lore_dump" type="Node2D"]
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Panel" type="Panel" parent="Control"]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 28.775
+anchor_bottom = 16.15
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_yjdjk")
+metadata/_edit_use_anchors_ = true
+
+[node name="script" type="Node2D" parent="."]

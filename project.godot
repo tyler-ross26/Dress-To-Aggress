@@ -12,9 +12,15 @@ config_version=5
 
 config/name="Dress to Aggress"
 config/tags=PackedStringArray("umkc")
+<<<<<<< Updated upstream
 run/main_scene="uid://dxevk147j4wxs"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://Assets/icon.svg"
+=======
+run/main_scene="uid://b1fc1024thyov"
+config/features=PackedStringArray("4.4", "Forward Plus")
+config/icon="res://Assets/Sprites/icon.svg"
+>>>>>>> Stashed changes
 
 [autoload]
 
