@@ -57,7 +57,7 @@ func _on_timer_timeout() -> void:
 	
 	#open new file
 	var tree: SceneTree = get_tree()
-	tree.change_scene_to_file("res://Scenes/AnimationTesting.tscn") #replace with fighting scene
+	tree.change_scene_to_file("res://Scenes/stageFight.tscn") #replace with fighting scene
 
 
 #returns array  of clothingn items that are currently overlapping the platform
