@@ -1,11 +1,10 @@
-[gd_scene load_steps=9 format=3 uid="uid://dxevk147j4wxs"]
+[gd_scene load_steps=8 format=3 uid="uid://dxevk147j4wxs"]
 
 [ext_resource type="Script" uid="uid://ogdqr5ijgblm" path="res://Scenes/main_menu.gd" id="1_1ehe0"]
-[ext_resource type="Texture2D" uid="uid://3jfcskrkcxid" path="res://Assets/Sprites/TemporaryBackgroundDressToAggress.png" id="1_48xlc"]
-[ext_resource type="FontFile" uid="uid://b312jr3o867yy" path="res://Assets/Sprites/04B_30__.TTF" id="2_1ehe0"]
+[ext_resource type="Texture2D" uid="uid://drlfw2n4iyt86" path="res://Assets/Sprites/MainMenuDTI.png" id="2_48xlc"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ce3w2"]
-texture = ExtResource("1_48xlc")
+texture = ExtResource("2_48xlc")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_48xlc"]
 
@@ -62,9 +61,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -182.0
-offset_top = -38.0
+offset_top = 45.0
 offset_right = 182.0
-offset_bottom = 195.0
+offset_bottom = 278.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 8
@@ -97,6 +96,20 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_opfnp")
 theme_override_styles/normal = SubResource("StyleBoxFlat_erv1k")
 text = "Options"
 
+[node name="Button4" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_hover_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_pressed_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 30
+theme_override_styles/focus = SubResource("StyleBoxEmpty_48xlc")
+theme_override_styles/hover = SubResource("StyleBoxFlat_n45e2")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_opfnp")
+theme_override_styles/normal = SubResource("StyleBoxFlat_erv1k")
+text = "Credits"
+
 [node name="Button3" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -111,24 +124,7 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_opfnp")
 theme_override_styles/normal = SubResource("StyleBoxFlat_erv1k")
 text = "Exit"
 
-[node name="Label" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -412.5
-offset_top = -205.0
-offset_right = 412.5
-offset_bottom = -138.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-theme_override_fonts/font = ExtResource("2_1ehe0")
-theme_override_font_sizes/font_size = 61
-text = "Dress To Aggress"
-
 [connection signal="pressed" from="VBoxContainer/Button" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="VBoxContainer/Button2" to="." method="_on_settings_pressed"]
+[connection signal="pressed" from="VBoxContainer/Button4" to="." method="_on_credits_pressed"]
 [connection signal="pressed" from="VBoxContainer/Button3" to="." method="_on_exit_pressed"]

@@ -72,5 +72,3 @@ func get_last_outfit() -> Array[Dictionary]:
 	var results = space_state.intersect_point(query)
 	
 	return results
-	
-	
