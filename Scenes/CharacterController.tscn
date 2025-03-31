@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://chyj64wwnwo67"]
+[gd_scene load_steps=34 format=3 uid="uid://chyj64wwnwo67"]
 
 [ext_resource type="Texture2D" uid="uid://bkv1eebpqokq1" path="res://Assets/Player Sprites/dashb1.png" id="1_n7ghd"]
 [ext_resource type="Script" uid="uid://cmdthl362buy2" path="res://Scripts/base_character_controller.gd" id="1_q13i1"]
@@ -22,9 +22,11 @@
 [ext_resource type="Texture2D" uid="uid://ip3b5f2j2e6l" path="res://Assets/Player Sprites/kickrecovery.png" id="12_bnttp"]
 [ext_resource type="Texture2D" uid="uid://l7gd33og44cx" path="res://Assets/Player Sprites/throw.png" id="14_q288o"]
 [ext_resource type="Texture2D" uid="uid://87nsyv7sulrk" path="res://Assets/Player Sprites/throw recovery.png" id="15_lcnf3"]
-[ext_resource type="Script" uid="uid://c4tm5bp6m4ur6" path="res://Scripts/hurtbox.gd" id="16_u1c27"]
-[ext_resource type="Script" uid="uid://c2vqkmhy0bijw" path="res://Scripts/hitbox.gd" id="17_op7ga"]
-[ext_resource type="Script" uid="uid://cpwnjci14lgit" path="res://Scripts/throw_hitbox.gd" id="24_lcnf3"]
+[ext_resource type="Script" path="res://Scripts/hurtbox.gd" id="16_u1c27"]
+[ext_resource type="Script" path="res://Scripts/hitbox.gd" id="17_op7ga"]
+[ext_resource type="Script" uid="uid://c12shv00mnant" path="res://Scenes/GenerateAnimationLayer.gd" id="23_31scl"]
+[ext_resource type="Resource" uid="uid://bqsttykalac5f" path="res://Assets/Resources/body.tres" id="24_5ye0y"]
+[ext_resource type="Script" path="res://Scripts/throw_hitbox.gd" id="24_lcnf3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5tmop"]
 size = Vector2(10, 20)
@@ -203,10 +205,23 @@ shape = SubResource("RectangleShape2D_5tmop")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_pbfsw")
 animation = &"dead"
+script = ExtResource("23_31scl")
+current_wearable = ExtResource("24_5ye0y")
+
+[node name="PantsLayer" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_pbfsw")
+animation = &"dead"
+script = ExtResource("23_31scl")
+current_wearable = ExtResource("24_5ye0y")
+
+[node name="ShirtLayer" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_pbfsw")
+animation = &"dead"
+script = ExtResource("23_31scl")
+current_wearable = ExtResource("24_5ye0y")
 
 [node name="Hurtbox" type="Area2D" parent="."]
 script = ExtResource("16_u1c27")
-metadata/_custom_type_script = "uid://c4tm5bp6m4ur6"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
 position = Vector2(-1, 3)
@@ -215,7 +230,6 @@ shape = SubResource("RectangleShape2D_op7ga")
 [node name="Punch Hitbox" type="Area2D" parent="."]
 position = Vector2(5, 3)
 script = ExtResource("17_op7ga")
-metadata/_custom_type_script = "uid://c2vqkmhy0bijw"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Punch Hitbox"]
 position = Vector2(1, 0)
@@ -225,7 +239,6 @@ debug_color = Color(0.809151, 0.00220805, 0.988406, 0.42)
 [node name="Kick Hitbox" type="Area2D" parent="."]
 position = Vector2(5, 3)
 script = ExtResource("17_op7ga")
-metadata/_custom_type_script = "uid://c2vqkmhy0bijw"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Kick Hitbox"]
 position = Vector2(5.5, -8)
@@ -234,7 +247,6 @@ debug_color = Color(0.786632, 0.431925, 0, 0.42)
 
 [node name="Throw Hitbox" type="Area2D" parent="."]
 script = ExtResource("24_lcnf3")
-metadata/_custom_type_script = "uid://c2vqkmhy0bijw"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Throw Hitbox"]
 position = Vector2(3.5, 3)

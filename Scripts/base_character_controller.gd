@@ -46,6 +46,10 @@ var left_ground_check = false
 
 @onready
 var animation_player: AnimatedSprite2D = $AnimatedSprite2D
+@onready
+var PantsLayer: AnimatedSprite2D = $PantsLayer
+@onready
+var ShirtLayer: AnimatedSprite2D = $ShirtLayer
 
 @onready
 var punch_hitbox: Hitbox = $"Punch Hitbox"
@@ -195,6 +199,8 @@ func _physics_process(delta: float) -> void:
 	
 	if dead: 
 		animation_player.play("dead")
+		PantsLayer.play("dead")
+		ShirtLayer.play("dead")
 	
 	handle_input(delta)
 	face_your_opponent()
@@ -243,19 +249,29 @@ func handle_states(direction, delta):
 		
 		CharacterState.IDLE:
 			animation_player.play("idle")
+			PantsLayer.play("idle")
+			ShirtLayer.play("idle")
 			idle_state(direction)
 			
 		CharacterState.WALK:
 			if facing_direction == 1:
 				if direction == 1:
 					animation_player.play("walk forward")
+					PantsLayer.play("walk forward")
+					ShirtLayer.play("walk forward")
 				else:
 					animation_player.play("walk backward")
+					PantsLayer.play("walk backward")
+					ShirtLayer.play("walk backward")
 			elif facing_direction == -1:
 				if direction == 1:
 					animation_player.play("walk backward")
+					PantsLayer.play("walk backward")
+					ShirtLayer.play("walk backward")
 				else:
 					animation_player.play("walk forward")
+					PantsLayer.play("walk forward")
+					ShirtLayer.play("walk forward")
 			
 			if (direction == facing_direction * -1): block_legal = true
 			else: block_legal = false
@@ -264,15 +280,29 @@ func handle_states(direction, delta):
 		
 		CharacterState.JUMP:
 			animation_player.play("jump")
+			PantsLayer.play("jump")
+			ShirtLayer.play("jump")
 			jump_state(direction, delta)
 		
 		CharacterState.DASH:
 			if dash_direction == 1:
-				if facing_direction == -1: animation_player.play("dash left")
-				else: animation_player.play("dash right")
+				if facing_direction == -1: 
+					animation_player.play("dash left")
+					PantsLayer.play("dash left")
+					ShirtLayer.play("dash left")
+				else: 
+					animation_player.play("dash right")
+					PantsLayer.play("dash right")
+					ShirtLayer.play("dash right")
 			else:
-				if facing_direction == -1: animation_player.play("dash right")
-				else: animation_player.play("dash left")
+				if facing_direction == -1:
+					animation_player.play("dash right")
+					PantsLayer.play("dash right")
+					ShirtLayer.play("dash right")
+				else: 
+					animation_player.play("dash left")
+					PantsLayer.play("dash left")
+					ShirtLayer.play("dash left")
 				
 			dash_state(delta)
 		
@@ -284,11 +314,15 @@ func handle_states(direction, delta):
 		CharacterState.PUNCH:
 			block_legal = false
 			animation_player.play(punch_data["active_animation"])
+			PantsLayer.play(punch_data["active_animation"])
+			ShirtLayer.play(punch_data["active_animation"])
 			punch_state(delta)
 		
 		CharacterState.KICK:
 			block_legal = false
 			animation_player.play(kick_data["active_animation"])
+			PantsLayer.play(kick_data["active_animation"])
+			ShirtLayer.play(kick_data["active_animation"])
 			kick_state(delta)
 		
 		CharacterState.RECOVERY:
@@ -305,6 +339,8 @@ func handle_states(direction, delta):
 		
 		CharacterState.BLOCK:
 			animation_player.play("block")
+			PantsLayer.play("block")
+			ShirtLayer.play("block")
 			disable_hitboxes()
 			block_state(delta)
 		
@@ -313,11 +349,15 @@ func handle_states(direction, delta):
 		
 		CharacterState.POSE:
 			animation_player.play("pose")
+			PantsLayer.play("pose")
+			ShirtLayer.play("pose")
 			disable_hitboxes()
 			pose_state(delta)
 		
 		CharacterState.DEAD:
 			animation_player.play("dead")
+			PantsLayer.play("dead")
+			ShirtLayer.play("dead")
 			velocity.x = move_toward(velocity.x, 0, 25)
 	
 	move_and_slide()
@@ -446,6 +486,8 @@ func start_recovery(frames, animation):
 	change_state(CharacterState.RECOVERY)
 	
 	animation_player.play(animation)
+	PantsLayer.play(animation)
+	ShirtLayer.play(animation)
 	var wait_time = frames * FRAME
 	var timer = get_tree().create_timer(wait_time)
 	timer.timeout.connect(func(): if state != CharacterState.STARTUP and state != CharacterState.HURT: change_state(CharacterState.IDLE))
@@ -454,6 +496,8 @@ func get_hit_with(attack_data):
 	change_state(CharacterState.HURT)
 	
 	animation_player.play("hurt")
+	PantsLayer.play("hurt")
+	ShirtLayer.play("hurt")
 	velocity.y = 0
 	velocity.x = 0
 	
@@ -481,6 +525,8 @@ func start_action(frames, continuation, animation):
 	change_state(CharacterState.STARTUP)
 	
 	animation_player.play(animation)
+	PantsLayer.play(animation)
+	ShirtLayer.play(animation)
 	
 	var wait_time = frames * FRAME
 	var timer = get_tree().create_timer(wait_time)
@@ -492,6 +538,8 @@ func start_pose():
 	change_state(CharacterState.POSE_STARTUP)
 	
 	animation_player.play(throw_data["startup_animation"])
+	PantsLayer.play(throw_data["startup_animation"])
+	ShirtLayer.play(throw_data["startup_animation"])
 	
 	var wait_time = throw_data["startup_frames"] * FRAME
 	var timer = get_tree().create_timer(wait_time)

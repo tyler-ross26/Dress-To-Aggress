@@ -1,1 +1,1 @@
-bluePants,blackShirt,t,,
+blueShorts,redShirt,rt,,
