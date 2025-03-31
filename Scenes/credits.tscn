@@ -1,0 +1,57 @@
+[gd_scene load_steps=2 format=3 uid="uid://cc56ttjj3q13u"]
+
+[ext_resource type="Script" uid="uid://y14xmvlxq88g" path="res://Scenes/credits.gd" id="1_r18jl"]
+
+[node name="Credits" type="Node2D"]
+script = ExtResource("1_r18jl")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+clip_contents = false
+offset_top = 405.0
+offset_right = 1280.0
+offset_bottom = 1125.0
+text = "
+
+
+
+
+
+
+
+
+
+
+
+
+
+The UMKC Game Dev Club
+
+Berenice Moreno-Perez
+Cameron Cianciolo
+Eric Schmidt
+Mason Allaman
+Oliver Eulert
+Rachael Garner
+Sailor Usher
+Sam Granade
+Temuulen Munkhjargal
+Tomie Williams
+Trevor Norton
+Tyler Ross
+Vincent Yang"
+scroll_active = false
+horizontal_alignment = 1
+
+[node name="Button" type="Button" parent="."]
+visible = false
+offset_left = 1127.0
+offset_top = 624.0
+offset_right = 1247.0
+offset_bottom = 696.0
+text = "Back"
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 3.0
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
