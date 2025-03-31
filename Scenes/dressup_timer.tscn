@@ -6,7 +6,7 @@
 script = ExtResource("1_s0ml5")
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 30.0
+wait_time = 10.0
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 offset_right = 265.0

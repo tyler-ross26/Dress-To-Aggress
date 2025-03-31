@@ -5,6 +5,7 @@ class_name Wearable
 @export_category("Clothing Properties")
 @export_enum("BASE", "LEGWEAR", "SHIRT", "ACCESSORY") var ClothingType: String = "BASE"
 @export_enum("BASE", "COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "MYTHIC") var Rarity: String = "BASE"
+@export var name: String
 @export var outfitSet: String
 @export var outfitPattern: String
 @export var description: String
@@ -44,6 +45,9 @@ func get_clothing_type() -> String:
 
 func get_rarity() -> String:
 	return Rarity
+
+func get_outfit_name() -> String:
+	return name
 
 func get_outfit_set() -> String:
 	return outfitSet
@@ -100,15 +104,18 @@ func get_idle_pose1() -> Texture2D:
 
 func get_walk_pose0() -> Texture2D:
 	return walkPose0
-
+	
 func get_walk_pose1() -> Texture2D:
 	return walkPose1
-
+	
 func get_walk_pose2() -> Texture2D:
 	return walkPose2
-
+	
 func get_walk_pose3() -> Texture2D:
 	return walkPose3
+	
+func get_block_pose() -> Texture2D:
+	return blockPose
 
 func get_kick_pose0() -> Texture2D:
 	return kickPose0

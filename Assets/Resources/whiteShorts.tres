@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="Wearable" load_steps=13 format=3 uid="uid://cpsf7qvhawxjp"]
+
+[ext_resource type="Texture2D" uid="uid://d0xs70xxi4iyo" path="res://Assets/Sprites/Clothing Frames/shorts/Idle Frames/IdleShorts0.png" id="1_v3kwc"]
+[ext_resource type="Texture2D" uid="uid://1wdqy8qirfwq" path="res://Assets/Sprites/Clothing Frames/shorts/Idle Frames/IdleShorts1.png" id="2_5oggp"]
+[ext_resource type="Texture2D" uid="uid://bya83yk4rh1ch" path="res://Assets/Sprites/Clothing Frames/shorts/Kick Frames/KickShorts1.png" id="3_0cd5h"]
+[ext_resource type="Texture2D" uid="uid://dnqn33rtbvtnv" path="res://Assets/Sprites/Clothing Frames/shorts/Kick Frames/KickShorts2.png" id="4_p8oxh"]
+[ext_resource type="Texture2D" uid="uid://d4mitgebpydng" path="res://Assets/Sprites/Clothing Frames/shorts/Mirror Frames/FinalizedModelShorts.png" id="5_v412k"]
+[ext_resource type="Texture2D" uid="uid://ciryr3n1rmcx3" path="res://Assets/Sprites/Clothing Frames/shorts/Punch Frames/PunchShorts1.png" id="6_f3fys"]
+[ext_resource type="Texture2D" uid="uid://c6uluxe0ri1n2" path="res://Assets/Sprites/Clothing Frames/shorts/Punch Frames/PunchShorts2.png" id="7_s080e"]
+[ext_resource type="Script" uid="uid://0bwef23hrt6j" path="res://Scripts/Wearable.gd" id="8_45esp"]
+[ext_resource type="Texture2D" uid="uid://dt0wevvnr3yc5" path="res://Assets/Sprites/Clothing Frames/shorts/Walk Frames/WalkShorts0.png" id="9_0wekh"]
+[ext_resource type="Texture2D" uid="uid://6k8jn617wuij" path="res://Assets/Sprites/Clothing Frames/shorts/Walk Frames/WalkShorts1.png" id="10_pllfa"]
+[ext_resource type="Texture2D" uid="uid://ba15hnj8q5iv0" path="res://Assets/Sprites/Clothing Frames/shorts/Walk Frames/WalkShorts2.png" id="11_h5hhw"]
+[ext_resource type="Texture2D" uid="uid://chm5wcjr3hyc6" path="res://Assets/Sprites/Clothing Frames/shorts/Walk Frames/WalkShorts3.png" id="12_oxvjm"]
+
+[resource]
+script = ExtResource("8_45esp")
+ClothingType = "LEGWEAR"
+Rarity = "COMMON"
+attackDamageChange = 0.0
+defenseChange = 0.0
+stylePoints = 0
+styleMultiplier = 0.0
+speedChange = 0.0
+name = "whiteShorts"
+outfitSet = "Basic"
+outfitPattern = "Solid"
+description = "blue Pants"
+color = Color(1, 1, 1, 1)
+mirrorPose = ExtResource("5_v412k")
+idlePose0 = ExtResource("1_v3kwc")
+idlePose1 = ExtResource("2_5oggp")
+walkPose0 = ExtResource("9_0wekh")
+walkPose1 = ExtResource("10_pllfa")
+walkPose2 = ExtResource("11_h5hhw")
+walkPose3 = ExtResource("12_oxvjm")
+kickPose0 = ExtResource("3_0cd5h")
+kickPose1 = ExtResource("4_p8oxh")
+punchPose0 = ExtResource("6_f3fys")
+punchPose1 = ExtResource("7_s080e")
+metadata/_custom_type_script = "uid://0bwef23hrt6j"

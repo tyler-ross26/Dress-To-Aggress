@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="Wearable" load_steps=13 format=3 uid="uid://c7mkbose27gt7"]
 
-[ext_resource type="Script" path="res://Scripts/Wearable.gd" id="1_nim6y"]
+[ext_resource type="Script" uid="uid://0bwef23hrt6j" path="res://Scripts/Wearable.gd" id="1_nim6y"]
 [ext_resource type="Texture2D" uid="uid://befe1kgue6m5d" path="res://Assets/Sprites/Clothing Frames/TankTop/Idle Frames/IdleTankTop0.png" id="1_yxoa5"]
 [ext_resource type="Texture2D" uid="uid://c8dedxku14gmt" path="res://Assets/Sprites/Clothing Frames/TankTop/Idle Frames/IdleTankTop1.png" id="2_n2fyi"]
 [ext_resource type="Texture2D" uid="uid://cxv8l604cup7c" path="res://Assets/Sprites/Clothing Frames/TankTop/Kick Frames/KickTankTop1.png" id="3_qqcjm"]
@@ -22,10 +22,11 @@ defenseChange = 0.0
 stylePoints = 5
 styleMultiplier = 1.0
 speedChange = 0.0
+name = "redShirt"
 outfitSet = "Basic"
 outfitPattern = "Solid"
 description = "This beautiful Red Shirt provides a slight damage boost!"
-color = Color(0.403384, 0.0611084, 0.220764, 1)
+color = Color(0.828746, 0.203966, 0.225106, 1)
 mirrorPose = ExtResource("5_n2fyi")
 idlePose0 = ExtResource("1_yxoa5")
 idlePose1 = ExtResource("2_n2fyi")

@@ -1,17 +1,17 @@
 [gd_resource type="Resource" script_class="Wearable" load_steps=13 format=3 uid="uid://but5elvbkg7mi"]
 
-[ext_resource type="Texture2D" uid="uid://befe1kgue6m5d" path="res://Assets/Sprites/Clothing Frames/TankTop/Idle Frames/IdleTankTop0.png" id="1_qr15n"]
-[ext_resource type="Texture2D" uid="uid://c8dedxku14gmt" path="res://Assets/Sprites/Clothing Frames/TankTop/Idle Frames/IdleTankTop1.png" id="2_wprcd"]
-[ext_resource type="Texture2D" uid="uid://cxv8l604cup7c" path="res://Assets/Sprites/Clothing Frames/TankTop/Kick Frames/KickTankTop1.png" id="3_5uor5"]
-[ext_resource type="Texture2D" uid="uid://c6fm3kr4h78pm" path="res://Assets/Sprites/Clothing Frames/TankTop/Kick Frames/KickTankTop2.png" id="4_sg2uk"]
-[ext_resource type="Texture2D" uid="uid://5by10m7sf0jw" path="res://Assets/Sprites/Clothing Frames/TankTop/Mirror Frames/FinalizedModelTankTop.png" id="5_nn0c2"]
-[ext_resource type="Texture2D" uid="uid://bcmoamei1rl4v" path="res://Assets/Sprites/Clothing Frames/TankTop/Punch Frames/PunchTankTop1.png" id="6_3wy5u"]
-[ext_resource type="Texture2D" uid="uid://ddcp6eyf42nte" path="res://Assets/Sprites/Clothing Frames/TankTop/Punch Frames/PunchTankTop2.png" id="7_s5ipp"]
-[ext_resource type="Script" path="res://Scripts/Wearable.gd" id="8_7rxkt"]
-[ext_resource type="Texture2D" uid="uid://cucscdajnr4nq" path="res://Assets/Sprites/Clothing Frames/TankTop/Walk Frames/WalkTankTop0.png" id="9_c7j2e"]
-[ext_resource type="Texture2D" uid="uid://dxepgjv0aomr1" path="res://Assets/Sprites/Clothing Frames/TankTop/Walk Frames/WalkTankTop1.png" id="10_l2chj"]
-[ext_resource type="Texture2D" uid="uid://d2b4exycwbjvf" path="res://Assets/Sprites/Clothing Frames/TankTop/Walk Frames/WalkTankTop2.png" id="11_8j7r3"]
-[ext_resource type="Texture2D" uid="uid://veq4symhd1wh" path="res://Assets/Sprites/Clothing Frames/TankTop/Walk Frames/WalkTankTop3.png" id="12_7ut84"]
+[ext_resource type="Texture2D" uid="uid://dhvjdnoflaakm" path="res://Assets/Sprites/Clothing Frames/LongSleeve/Idle Frames/IdleLongSleeve0.png" id="1_qr15n"]
+[ext_resource type="Texture2D" uid="uid://dwxaiy6noqu1q" path="res://Assets/Sprites/Clothing Frames/LongSleeve/Idle Frames/IdleLongSleeve1.png" id="2_wprcd"]
+[ext_resource type="Texture2D" uid="uid://dbf76elru6rnq" path="res://Assets/Sprites/Clothing Frames/LongSleeve/Kick Frames/KickLongSleeve1.png" id="3_5uor5"]
+[ext_resource type="Texture2D" uid="uid://pbxx8w5v3fxw" path="res://Assets/Sprites/Clothing Frames/LongSleeve/Kick Frames/KickLongSleeve2.png" id="4_sg2uk"]
+[ext_resource type="Texture2D" uid="uid://ialgbdgj5hw0" path="res://Assets/Sprites/Clothing Frames/LongSleeve/Mirror Frames/FinalizedModelLongSleeve.png" id="5_nn0c2"]
+[ext_resource type="Texture2D" uid="uid://dckp4bghy70ml" path="res://Assets/Sprites/Clothing Frames/LongSleeve/Punch Frames/PunchLongSleeve1.png" id="6_3wy5u"]
+[ext_resource type="Texture2D" uid="uid://c3u13hdtq8nft" path="res://Assets/Sprites/Clothing Frames/LongSleeve/Punch Frames/PunchLongSleeve2.png" id="7_s5ipp"]
+[ext_resource type="Script" uid="uid://0bwef23hrt6j" path="res://Scripts/Wearable.gd" id="8_7rxkt"]
+[ext_resource type="Texture2D" uid="uid://bksjgxh1fyag4" path="res://Assets/Sprites/Clothing Frames/LongSleeve/Walk Frames/WalkLongSleeve0.png" id="9_7rxkt"]
+[ext_resource type="Texture2D" uid="uid://bqej65d8gmo3w" path="res://Assets/Sprites/Clothing Frames/LongSleeve/Walk Frames/WalkLongSleeve1.png" id="10_c7j2e"]
+[ext_resource type="Texture2D" uid="uid://ddvg7100aqrlw" path="res://Assets/Sprites/Clothing Frames/LongSleeve/Walk Frames/WalkLongSleeve2.png" id="11_l2chj"]
+[ext_resource type="Texture2D" uid="uid://di68p6046j5h" path="res://Assets/Sprites/Clothing Frames/LongSleeve/Walk Frames/WalkLongSleeve3.png" id="12_8j7r3"]
 
 [resource]
 script = ExtResource("8_7rxkt")
@@ -22,17 +22,18 @@ defenseChange = 0.0
 stylePoints = 5
 styleMultiplier = 1.0
 speedChange = 0.0
+name = "greenShirt"
 outfitSet = "Basic"
 outfitPattern = "Solid"
 description = "This green Shirt provides a health boost!"
-color = Color(0.563451, 0.669116, 0.428136, 1)
+color = Color(0.305242, 0.646263, 0.474816, 1)
 mirrorPose = ExtResource("5_nn0c2")
 idlePose0 = ExtResource("1_qr15n")
 idlePose1 = ExtResource("2_wprcd")
-walkPose0 = ExtResource("9_c7j2e")
-walkPose1 = ExtResource("10_l2chj")
-walkPose2 = ExtResource("11_8j7r3")
-walkPose3 = ExtResource("12_7ut84")
+walkPose0 = ExtResource("9_7rxkt")
+walkPose1 = ExtResource("10_c7j2e")
+walkPose2 = ExtResource("11_l2chj")
+walkPose3 = ExtResource("12_8j7r3")
 kickPose0 = ExtResource("3_5uor5")
 kickPose1 = ExtResource("4_sg2uk")
 punchPose0 = ExtResource("6_3wy5u")
