@@ -1,0 +1,17 @@
+[gd_scene load_steps=2 format=3 uid="uid://dfp7lwjhqnn0k"]
+
+[ext_resource type="Script" uid="uid://ctg7anoldctbg" path="res://Scenes/dressup_timer.gd" id="1_s0ml5"]
+
+[node name="Dressup Timer" type="Node2D"]
+script = ExtResource("1_s0ml5")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 10.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+offset_right = 265.0
+offset_bottom = 85.0
+text = "TIMER HERE"
+scroll_active = false
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

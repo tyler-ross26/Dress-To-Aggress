@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="Dress to Aggress"
+
 run/main_scene="uid://dtp5eywvmmy1j"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://Assets/icon.svg"
@@ -96,6 +97,7 @@ player2_throw={
 [layer_names]
 
 2d_physics/layer_1="World"
+
 2d_physics/layer_2="Characters"
 
 [rendering]
@@ -105,3 +107,5 @@ textures/layer_2=""
 textures/layer_1=""
 textures/size/viewport_height=898
 textures/size/viewport_width=1280
+2d_physics/layer_2="Draging"
+2d_physics/layer_3="Platforms"

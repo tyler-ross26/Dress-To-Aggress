@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://b1fc1024thyov"]
+
+[ext_resource type="Texture2D" uid="uid://xslp5k44t814" path="res://Assets/dress-up-room.jpg" id="1_fj7yv"]
+[ext_resource type="PackedScene" uid="uid://cvacyegnnbes0" path="res://object.tscn" id="2_tlwt5"]
+[ext_resource type="PackedScene" uid="uid://cnlqn7i6s4r" path="res://platform.tscn" id="3_tlwt5"]
+
+[node name="World" type="Node2D"]
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-1, 2.99999)
+scale = Vector2(0.765563, 0.665306)
+texture = ExtResource("1_fj7yv")
+
+[node name="Object" parent="." instance=ExtResource("2_tlwt5")]
+
+[node name="Platform" parent="." instance=ExtResource("3_tlwt5")]
+position = Vector2(-422, 82)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
