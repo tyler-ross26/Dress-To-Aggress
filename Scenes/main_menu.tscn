@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://8cy0o0plo2y4"]
+[gd_scene load_steps=9 format=3 uid="uid://dxevk147j4wxs"]
 
 [ext_resource type="Script" uid="uid://ogdqr5ijgblm" path="res://Scenes/main_menu.gd" id="1_1ehe0"]
 [ext_resource type="Texture2D" uid="uid://3jfcskrkcxid" path="res://Assets/Sprites/TemporaryBackgroundDressToAggress.png" id="1_48xlc"]
