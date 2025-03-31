@@ -37,6 +37,8 @@ var kick_range = 32
 var kick_time = 0.30
 var punch_time = 0.15
 
+var roll = 0
+
 func release_inputs():
 	pressing_left = false
 	pressing_right = false
@@ -81,10 +83,10 @@ func handle_input(delta):
 func run_ai():
 	
 	#Example on how to make the CPU approach to a range. The + and - 2 are necessary because, if it's exact, it starts jittering back and forth. Give it a little leeway.
-	if horizontal_distance > kick_range + 2:
-		walk_closer()
+	if horizontal_distance > kick_range + 2 or enemy_approaching == 0:
+		if get_random_number() < 15: approach()
 	elif horizontal_distance < kick_range - 2:
-		walk_away()
+		if get_random_number() < 15: retreat()
 	else:
 		release_inputs()
 	
@@ -92,11 +94,19 @@ func run_ai():
 	if enemy_state == CharacterState.JUMP: 
 		if vertical_distance < 30:
 			if horizontal_distance < kick_range + 3 and horizontal_distance >= kick_range and enemy_approaching == 1:
-				kick()
+				if get_random_number() < 10:
+					kick()
+	
+	if horizontal_distance < kick_range:
+		if get_random_number() < 1:
+			punch()
+		elif get_random_number() < 2:
+			kick()
 	
 	#Example on how to make the CPU pose at pose range.
 	if horizontal_distance <= pose_range:
-		if is_on_floor(): use_pose()
+		if get_random_number() < 5:
+			if is_on_floor(): use_pose()
 	
 	#Example on how to make it block. The "***_time" variables tell the CPU to hold block for that long to properly block the attack. Make this chance based, or we'll have a perfect CPU that blocks every attack.
 	if (Input.is_action_just_pressed(enemy.punch_input) and horizontal_distance <= punch_range):
@@ -107,7 +117,8 @@ func run_ai():
 	
 	#Example on punishing after blocking a kick. This can be easily copied to make it punish punches.
 	if (enemy_just_attacked and enemy.state == CharacterState.RECOVERY and horizontal_distance <= kick_range):
-		kick()
+		if get_random_number() < 5:
+			kick()
 
 #This set of functions define the CPU's movement relative to the player. A little bit of underlying logic here, might not need to mess with it. Hopefully. Maybe.
 func walk_closer():
@@ -171,12 +182,38 @@ func dash_towards():
 				start_dash(facing_direction)
 		dash_direction = facing_direction
 
+
+func approach():
+	roll = get_random_number()
+	
+	if (is_on_floor()):
+		if roll <= 80:
+			walk_closer()
+		elif roll <= 95:
+			dash_towards()
+		else:
+			print(roll)
+			jump_forward()
+
+func retreat():
+	roll = get_random_number()
+	
+	if (is_on_floor()):
+		if roll <= 80:
+			walk_away()
+		elif roll <= 95:
+			dash_away()
+		else:
+			print(roll)
+			jump_away()
+
 #These functions make the CPU "press buttons". It makes the corresponding boolean true for an instant, and then makes it false, similarly to how a player presses and releases a button. 
 func block(time):
-	walk_away()
-	await get_tree().create_timer(time).timeout
-	pressing_left = false
-	pressing_right = false
+	if get_random_number() < 20:
+		walk_away()
+		await get_tree().create_timer(time).timeout
+		pressing_left = false
+		pressing_right = false
 
 func punch():
 	punch_pressed = true
@@ -197,18 +234,6 @@ func use_pose():
 	pose_pressed = true
 	await get_tree().create_timer(0.2).timeout
 	pose_pressed = false
-
-
-
-#func find_range():
-	#if horizontal_distance <= pose_range:
-		#set_range(Enemy_Range.POSE)
-	#elif horizontal_distance <= punch_range:
-		#set_range(Enemy_Range.PUNCH)
-	#elif horizontal_distance <= kick_range:
-		#set_range(Enemy_Range.KICK)
-	#else:
-		#set_range(Enemy_Range.FAR)
 
 #I CAN SEE THE UNIVERSE
 #Defines the logic for the CPU's eye variables, and reading that data of what the player's doing.
@@ -244,6 +269,9 @@ func check_enemy_attack():
 		
 		enemy_just_attacked = false
 		last_enemy_attack = null
+
+func get_random_number():
+	return randi() % 100 + 1
 
 #Everything from here down is functions from the parent class, overridden so that the CPU controller isn't checking for player inputs. Don't peek behind the curtain -- the void stares back.
 func walk_state(direction):

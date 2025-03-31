@@ -214,6 +214,7 @@ func _ready():
 	
 	set_controls()
 	disable_hitboxes()
+	#scale_stats()
 	update_healthbar()
 
 #This is the first function at the heart of the character controller functionality, called every frame. It handles taking in inputs, but also establishing what inputs are valid for each state, and calling the corresponding function for that state. 
@@ -675,10 +676,10 @@ func face_your_opponent():
 	horizontal_distance = abs(enemy.global_position.x - global_position.x)
 	vertical_distance = enemy.global_position.y - global_position.y
 	
-	if (horizontal_distance < 9) and (vertical_distance > 19) and is_on_floor():
+	if (horizontal_distance < 10) and (vertical_distance > 19) and is_on_floor():
 		print("I'm standing on top of him.") 
 		velocity.y = -30
-		velocity.x = facing_direction * -1 * 70
+		velocity.x = facing_direction * -1 * 90
 	if (horizontal_distance < 0.5) and (vertical_distance > 19) and is_on_floor():
 		print("RANDOM BULLSHIT GO")
 	elif enemy_direction != 0 and enemy_direction != facing_direction and not (horizontal_distance < 0.5):
@@ -727,3 +728,27 @@ func disable_control():
 func enable_control():
 	disabled = false
 	set_controls()
+
+'''
+func scale_stats():
+	movement_speed_mult = 
+	dash_speed_mult = 
+	dash_available =
+	jump_height_mult =
+	jump_speed_mult =
+
+	punch_speed_mult = 
+	punch_hitstun_mult = 
+	punch_knockback_mult = 
+	punch_damage_mult = 
+
+	kick_speed_mult = 
+	kick_hitstun_mult = 
+	kick_knockback_mult = 
+	kick_forward_mult = 
+	kick_damage_mult = 
+
+	pose_speed_mult = 
+	pose_hitstun_mult = 
+	pose_knockback_mult = 
+	pose_damage_mult = '''
