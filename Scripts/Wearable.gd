@@ -3,21 +3,25 @@ extends Resource
 class_name Wearable
 
 @export_category("Clothing Properties")
-
 @export_enum("BASE", "LEGWEAR", "SHIRT", "ACCESSORY") var ClothingType: String = "BASE"
 @export_enum("BASE", "COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "MYTHIC") var Rarity: String = "BASE"
-@export var attackDamageChange: float #x.x multiplier
-@export var defenseChange: float #x.x multiplier
-@export var stylePoints: int
-@export var styleMultiplier: float #x.x multiplier
-@export var speedChange: float #x.x multiplier
-
-@export_category("Clothing Information")
 @export var name: String
 @export var outfitSet: String
 @export var outfitPattern: String
 @export var description: String
 @export var color: Color
+@export var stylePoints: int
+@export var styleMultiplier: float #x.x multiplier
+
+@export_category("Fighting Information") # All use x.x multiplier
+@export var attackDamageChange: float
+@export var attackSpeedChange: float
+@export var defenseChange: float
+@export var walkSpeedChange: float 
+@export var dashSpeedChange: float
+@export var jumpHeightChange: float 
+@export var hitstunLengthChange: float
+@export var knockbackChange: float
 
 @export_category("Animation Frames")
 @export var mirrorPose: Texture2D
@@ -35,26 +39,12 @@ class_name Wearable
 @export var hurtPose: Texture2D
 @export var Pose28: Texture2D
 
+# Clothing Properties getters
 func get_clothing_type() -> String:
 	return ClothingType
-	
+
 func get_rarity() -> String:
 	return Rarity
-	
-func get_attack_damage_change() -> float:
-	return attackDamageChange
-	
-func get_defense_change() -> float:
-	return defenseChange
-
-func get_style_points() -> int:
-	return stylePoints
-
-func get_style_multiplier() -> float:
-	return styleMultiplier
-
-func get_speed_change() -> float:
-	return speedChange
 
 func get_outfit_name() -> String:
 	return name
@@ -64,16 +54,48 @@ func get_outfit_set() -> String:
 
 func get_outfit_pattern() -> String:
 	return outfitPattern
-	
+
 func get_description() -> String:
 	return description
 
 func get_color() -> Color:
 	return color
-	
+
+func get_style_points() -> int:
+	return stylePoints
+
+func get_style_multiplier() -> float:
+	return styleMultiplier
+
+# Fighting Information getters
+func get_attack_damage_change() -> float:
+	return attackDamageChange
+
+func get_attack_speed_change() -> float:
+	return attackSpeedChange
+
+func get_defense_change() -> float:
+	return defenseChange
+
+func get_walk_speed_change() -> float:
+	return walkSpeedChange
+
+func get_dash_speed_change() -> float:
+	return dashSpeedChange
+
+func get_jump_height_change() -> float:
+	return jumpHeightChange
+
+func get_hitstun_length_change() -> float:
+	return hitstunLengthChange
+
+func get_knockback_change() -> float:
+	return knockbackChange
+
+# Animation Frames getters
 func get_mirror_pose() -> Texture2D:
 	return mirrorPose
-	
+
 func get_idle_pose0() -> Texture2D:
 	return idlePose0
 
@@ -103,10 +125,13 @@ func get_kick_pose1() -> Texture2D:
 
 func get_punch_pose0() -> Texture2D:
 	return punchPose0
-	
+
 func get_punch_pose1() -> Texture2D:
 	return punchPose1
-	
+
+func get_block_pose() -> Texture2D:
+	return blockPose
+
 func get_hurt_pose() -> Texture2D:
 	return hurtPose
 
