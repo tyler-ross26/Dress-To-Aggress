@@ -1,4 +1,4 @@
-[gd_resource type="Resource" script_class="Wearable" load_steps=13 format=3 uid="uid://c4w8betwkiqn6"]
+[gd_resource type="Resource" script_class="Wearable" load_steps=13 format=3 uid="uid://bdypd0nw7umi7"]
 
 [ext_resource type="Texture2D" uid="uid://bsrbv4absdkx1" path="res://Assets/Sprites/Clothing Frames/Pants/Idle Frames/IdlePants0.png" id="1_pyxka"]
 [ext_resource type="Texture2D" uid="uid://byh3nprx5hpui" path="res://Assets/Sprites/Clothing Frames/Pants/Idle Frames/IdlePants1.png" id="2_uw7kf"]

@@ -129,9 +129,6 @@ func get_punch_pose0() -> Texture2D:
 func get_punch_pose1() -> Texture2D:
 	return punchPose1
 
-func get_block_pose() -> Texture2D:
-	return blockPose
-
 func get_hurt_pose() -> Texture2D:
 	return hurtPose
 
